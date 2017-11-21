@@ -1,13 +1,12 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
+#include "Core/Core.h"
+#include "Textures/Texture.h"
 
-class app
+class App
 {
-private:
-	sf::Window mainWindow;
-
 public:
-	void Init();
-	void Loop();
+	static std::vector<Textures::Texture *> loadedTextures;
+
+	static void LoadTextures();
 };

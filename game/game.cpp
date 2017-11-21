@@ -1,12 +1,10 @@
 #include <iostream>
-
 #include "app/app.h"
-
 #include <SFML/Graphics.hpp>
 
 int main()
 {
-	app* mainClass = new app();
+	Core* mainClass = new Core();
 
 	/*
 		Uruchomienie aplikacji

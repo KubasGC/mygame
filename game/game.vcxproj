@@ -138,6 +138,7 @@
   <ItemGroup>
     <ClInclude Include="app\app.h" />
     <ClInclude Include="app\Core\Core.h" />
+    <ClInclude Include="app\Textures\Texture.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -32,5 +32,8 @@
     <ClInclude Include="app\app.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="app\Textures\Texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

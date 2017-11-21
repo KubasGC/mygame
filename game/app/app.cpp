@@ -1,23 +1,15 @@
 #include "app.h"
+#include <iostream>
 
-void app::Init()
+std::vector<Textures::Texture *> App::loadedTextures;
+
+void App::LoadTextures()
 {
-	mainWindow.create(sf::VideoMode(1366, 768), "Game");
-	mainWindow.setFramerateLimit(60);
-}
+	const char *  tileName = "resources/tiles/forest_tiles.png";
+	Textures::Texture* tempTexture = new Textures::Texture();
+	tempTexture->textureId = 1;
+	tempTexture->sfmlTexture.loadFromFile(tileName, sf::IntRect(0, 0, 16, 16));
 
-void app::Loop()
-{
-	while (mainWindow.isOpen())
-	{
-#pragma region == Events ==  
-		sf::Event event;
-		while (mainWindow.pollEvent(event))
-		{
-			if (event.type == sf::Event::Closed)
-				mainWindow.close();
-		}
-#pragma endregion
-
-	}
+	loadedTextures.push_back(tempTexture);
+	std::cout << "Added texture no. 1" << std::endl;
 }
