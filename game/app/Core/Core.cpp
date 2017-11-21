@@ -17,6 +17,11 @@ void Core::Init()
 
 	mainWindow.create(sf::VideoMode(1366, 768), "Game");
 	mainWindow.setFramerateLimit(60);
+
+	mainCamera.setSize(sf::Vector2f(mainWindow.getSize().x, mainWindow.getSize().y));
+	mainCamera.setCenter(0, 0);
+
+	mainWindow.setView(mainCamera);
 }
 
 void Core::Loop()
@@ -36,6 +41,7 @@ void Core::Loop()
 		// Render
 		mainWindow.clear(sf::Color::Black);
 		RenderMap();
+		RenderEntities();
 		mainWindow.display();
 
 	}
@@ -43,7 +49,7 @@ void Core::Loop()
 
 void Core::RenderMap()
 {
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 1; i++)
 	{
 		int x = 64 * i;
 		sf::Texture tempTexture;
@@ -52,9 +58,14 @@ void Core::RenderMap()
 
 		mainWindow.draw(tempSprite);
 	}
+}
 
+void Core::RenderEntities()
+{
 	// Draw player sprite
 	mainWindow.draw(*(playerClass->GetPlayerSprite()));
+	mainCamera.setCenter(playerClass->GetPlayerSprite()->getPosition());
+	mainWindow.setView(mainCamera);
 }
 
 void Core::KeyboardEvents()
