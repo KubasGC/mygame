@@ -9,7 +9,7 @@ Core::Core()
 void Core::Init()
 {
 	using namespace std;
-	
+
 	// £adowanie tekstur
 	cout << "Loading textures..." << endl;
 	App::LoadTextures();
@@ -26,11 +26,14 @@ void Core::Init()
 	// Tworzenie okna
 	mainWindow.create(sf::VideoMode(1366, 768), "Game");
 	mainWindow.setFramerateLimit(60);
+	mainWindow.setVerticalSyncEnabled(true);
 
 	// Ustawianie kamery
-	mainCamera.setSize(sf::Vector2f((float) mainWindow.getSize().x, (float) mainWindow.getSize().y));
-	mainCamera.setCenter(0, 0);
-	mainWindow.setView(mainCamera);
+	mainCamera.setSize(sf::Vector2f((float)mainWindow.getSize().x / 4, (float)mainWindow.getSize().y / 4));
+	//mainCamera.zoom(0.4);
+
+	// Ustawienie typu renderowanego obiektu
+	renderType = RenderType::GAME;
 }
 
 // G³ówna pêtla
@@ -46,21 +49,29 @@ void Core::Loop()
 				mainWindow.close();
 		}
 
-		KeyboardEvents();
+		// Renderowanie gry
+		if (renderType == RenderType::GAME)
+		{
 
-		// Sprawdzanie kolizji gracza
-		PlayerCollisionDetection();
+			// Eventy klawiatury
+			GameKeyboardEvents();
 
-		// Render
-		mainWindow.clear(sf::Color::Black);
-		RenderMap();
-		RenderEntities();
-		mainWindow.display();
+			// Czyszczenie okna
+			mainWindow.clear(sf::Color::Black);
 
+			// Render mapy
+			GameRenderMap();
+
+			// Render obiektów
+			GameRenderEntities();
+
+			// Wyœwietlenie klatki
+			mainWindow.display();
+		}
 	}
 }
 
-void Core::RenderMap()
+void Core::GameRenderMap()
 {
 	for (int i = 0; i < App::loadedMap.size(); i++)
 	{
@@ -68,19 +79,7 @@ void Core::RenderMap()
 	}
 }
 
-void Core::PlayerCollisionDetection()
-{
-	// Sprawdzanie kolizji 
-	for (int i = 0; i < App::loadedMap.size(); i++)
-	{
-		if (App::loadedMap[i]->collisions && playerClass->GetPlayerShape()->getGlobalBounds().intersects(App::loadedMap[i]->tileSprite.getGlobalBounds()))
-		{
-			playerClass->ToggleMove(playerClass->GetDirection(), false);
-		}
-	}
-}
-
-void Core::RenderEntities()
+void Core::GameRenderEntities()
 {
 	// Rysowanie playersprite
 	mainCamera.setCenter(playerClass->GetPlayerShape()->getPosition());
@@ -88,7 +87,7 @@ void Core::RenderEntities()
 	mainWindow.draw(*(playerClass->GetPlayerSprite()));
 	// Odœwie¿eni pozycji gracza (sprite)f
 	playerClass->UpdatePosition();
-	
+
 
 	sf::Sprite testSprite;
 
@@ -106,7 +105,7 @@ void Core::RenderEntities()
 	mainWindow.draw(tempText);
 }
 
-void Core::KeyboardEvents()
+void Core::GameKeyboardEvents()
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	{

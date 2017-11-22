@@ -9,15 +9,11 @@ private:
 
 	int direction;
 	int animation;
-	int movementSpeed;
-
-	bool canMoveUp;
-	bool canMoveDown;
-	bool canMoveLeft;
-	bool canMoveRight;
+	float movementSpeed;
 
 	void ChangeAngle();
-	void ResetAbleToMove();
+
+	bool DoesPlayerHasCollision();
 public:
 	Player();
 	~Player();
@@ -27,9 +23,8 @@ public:
 
 	void SetDirection(int dir);
 	int GetDirection();
+	int GetMovementSpeed() { return movementSpeed; }
 	void AnimateMove();
 	void UpdatePosition();
-
-	void ToggleMove(int dir, bool toggle);
 };
 

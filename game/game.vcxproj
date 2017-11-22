@@ -161,8 +161,10 @@
   </ItemGroup>
   <ItemGroup>
     <Xml Include="resources\maps\defaultMap.xml" />
+    <Xml Include="resources\tiles\Floor.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="resources\tiles\Floor.png" />
     <Image Include="resources\sprites\playersprite.png" />
     <Image Include="resources\tiles\forest_tiles.png" />
   </ItemGroup>

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<textures>
+  <!-- TRAWA -->
+  <texture left="112" top="96" width="16" height="16" />
+  <texture left="128" top="96" width="16" height="16" />
+  <texture left="144" top="96" width="16" height="16" />
+
+  <texture left="112" top="112" width="16" height="16" />
+  <texture left="128" top="112" width="16" height="16" />
+  <texture left="144" top="112" width="16" height="16" />
+
+  <texture left="112" top="128" width="16" height="16" />
+  <texture left="128" top="128" width="16" height="16" />
+  <texture left="144" top="128" width="16" height="16" />
+</textures>

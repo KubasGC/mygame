@@ -1,23 +1,20 @@
 #include "Player.h"
 #include <iostream>
+#include "../app.h"
 
 
 Player::Player()
 {
 	playerTexture.loadFromFile("resources/sprites/playersprite.png");
 	playerSprite.setTexture(playerTexture);
-	playerSprite.setTextureRect(sf::IntRect(0, 512, 64, 64));
-	playerShape.setSize(sf::Vector2f(32, 32));
+	playerSprite.setTextureRect(sf::IntRect(0, 128, 16, 16));
+	playerShape.setSize(sf::Vector2f(16, 16));
 	playerShape.setFillColor(sf::Color::Blue);
 
 	direction = 0;
 	animation = 0;
-	movementSpeed = 2;
+	movementSpeed = 0.7f;
 
-	canMoveUp = true;
-	canMoveDown = true;
-	canMoveLeft = true;
-	canMoveRight = true;
 
 
 	std::cout << "Player class has loaded\n";
@@ -51,12 +48,41 @@ void Player::ChangeAngle()
 	}
 }
 
-void Player::ResetAbleToMove()
+bool Player::DoesPlayerHasCollision()
 {
-	canMoveUp = true;
-	canMoveDown = true;
-	canMoveLeft = true;
-	canMoveRight = true;
+	sf::FloatRect playerBounds = playerShape.getGlobalBounds();
+	for (int i = 0; i < (int)App::loadedMap.size(); i++)
+	{
+		if (App::loadedMap[i]->collisions)
+		{
+			switch (direction)
+			{
+			case 0: // góra
+				playerBounds.top -= movementSpeed;
+				if (playerBounds.intersects(App::loadedMap[i]->tileSprite.getGlobalBounds()))
+					return true;
+				break;
+			case 1: // dó³
+				playerBounds.top += movementSpeed;
+				if (playerBounds.intersects(App::loadedMap[i]->tileSprite.getGlobalBounds()))
+					return true;
+				break;
+
+			case 2: // lewo
+				playerBounds.left -= movementSpeed;
+				if (playerBounds.intersects(App::loadedMap[i]->tileSprite.getGlobalBounds()))
+					return true;
+				break;
+
+			case 3: // prawo
+				playerBounds.left += movementSpeed;
+				if (playerBounds.intersects(App::loadedMap[i]->tileSprite.getGlobalBounds()))
+					return true;
+				break;
+			}
+		}
+	}
+	return false;
 }
 
 sf::Sprite * Player::GetPlayerSprite()
@@ -89,44 +115,37 @@ void Player::AnimateMove()
 	if (animation > 32)
 		animation = 0;
 
-	int tempAnim = (int) floor(animation / 4);
+	int tempAnim = (int)floor(animation / 4);
 
 	switch (direction)
 	{
 	case 0: // Góra
-		if (canMoveUp)
-		{
-			playerSprite.setTextureRect(sf::IntRect(64 * tempAnim, 512, 64, 64));
-			playerShape.move(0, -movementSpeed);
-			ResetAbleToMove();
-		}
+
+		playerSprite.setTextureRect(sf::IntRect(16 * tempAnim, 128, 16, 16));
+		if (!DoesPlayerHasCollision())
+			playerShape.move(0, (float)-movementSpeed);
 		break;
 
 	case 1: // Dó³
-		if (canMoveDown)
-		{
-			playerSprite.setTextureRect(sf::IntRect(64 * tempAnim, 640, 64, 64));
-			playerShape.move(0, movementSpeed);
-			ResetAbleToMove();
-		}
+
+		playerSprite.setTextureRect(sf::IntRect(16 * tempAnim, 160, 16, 16));
+		if (!DoesPlayerHasCollision())
+			playerShape.move(0, (float)movementSpeed);
 		break;
 
 	case 2: // Lewo
-		if (canMoveLeft)
-		{
-			playerSprite.setTextureRect(sf::IntRect(64 * tempAnim, 576, 64, 64));
-			playerShape.move(-movementSpeed, 0);
-			ResetAbleToMove();
-		}
+
+		playerSprite.setTextureRect(sf::IntRect(16 * tempAnim, 144, 16, 16));
+		if (!DoesPlayerHasCollision())
+			playerShape.move((float)-movementSpeed, 0);
+
 		break;
 
 	case 3: // Prawo
-		if (canMoveRight)
-		{
-			playerSprite.setTextureRect(sf::IntRect(64 * tempAnim, 704, 64, 64));
-			playerShape.move(movementSpeed, 0);
-			ResetAbleToMove();
-		}
+		playerSprite.setTextureRect(sf::IntRect(16 * tempAnim, 176, 16, 16));
+		if (!DoesPlayerHasCollision())
+			playerShape.move((float)movementSpeed, 0);
+
 		break;
 	}
 
@@ -135,27 +154,5 @@ void Player::AnimateMove()
 void Player::UpdatePosition()
 {
 	//playerSprite.setPosition(playerShape.getPosition());
-	playerSprite.setPosition(sf::Vector2f(playerShape.getPosition().x - 16, playerShape.getPosition().y - 32));
-}
-
-void Player::ToggleMove(int dir, bool toggle)
-{
-	switch (dir)
-	{
-		case 0:
-			canMoveUp = toggle;
-			break;
-
-		case 1:
-			canMoveDown = toggle;
-			break;
-
-		case 2:
-			canMoveLeft = toggle;
-			break;
-
-		case 3:
-			canMoveRight = toggle;
-			break;
-	}
+	playerSprite.setPosition(sf::Vector2f(playerShape.getPosition().x - 8, playerShape.getPosition().y - 16));
 }

@@ -7,5 +7,6 @@ struct Tile
 	bool collisions;
 	int posX;
 	int posY;
+	int scale;
 	sf::Sprite tileSprite;
 };

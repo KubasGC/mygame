@@ -10,12 +10,22 @@ private:
 	sf::Font mainFont;
 	Player* playerClass;
 
-	void RenderMap();
-	void PlayerCollisionDetection();
-	void RenderEntities();
-	void KeyboardEvents();
+	int renderType;
+
+	// Renderowanie gry
+
+	void GameRenderMap();
+	void GameRenderEntities();
+	void GameKeyboardEvents();
 public:
 	Core();
+
+	enum RenderType
+	{
+		INTRO,
+		MENU,
+		GAME
+	};
 
 	void Init();
 	void Loop();
