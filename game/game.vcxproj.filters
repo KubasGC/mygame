@@ -45,4 +45,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Font Include="resources\fonts\BarlowSemiCondensed-Light.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="resources\maps\defaultMap.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\sprites\playersprite.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\tiles\forest_tiles.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
 </Project>
