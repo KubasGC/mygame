@@ -21,7 +21,12 @@ private:
 
 	// Edytor map
 	sf::RectangleShape * editorShape;
+	sf::Sprite editorSprite;
+	int editorChoosedTexture;
+	bool editorRightButtonPressed;
+
 	void EditorRenderMap();
+	void EditorMouseEvents();
 	sf::Vector2i GetTileFromMouse();
 public:
 	Core();

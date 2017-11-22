@@ -162,3 +162,13 @@ void App::LoadMapFromFile(std::string fileName)
 		child = child->next_sibling();
 	}
 }
+
+Tile * App::GetTextureFromPosition(int left, int top)
+{
+	for (int i = 0; i < loadedMap.size(); i++)
+	{
+		if (loadedMap[i]->posX == left && loadedMap[i]->posY == top)
+			return loadedMap[i];
+	}
+	return nullptr;
+}
