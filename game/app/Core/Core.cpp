@@ -83,12 +83,10 @@ void Core::PlayerCollisionDetection()
 void Core::RenderEntities()
 {
 	// Rysowanie playersprite
-	
 	mainCamera.setCenter(playerClass->GetPlayerShape()->getPosition());
-	
 	// mainWindow.draw(*(playerClass->GetPlayerShape()));
 	mainWindow.draw(*(playerClass->GetPlayerSprite()));
-	
+	// Odœwie¿eni pozycji gracza (sprite)f
 	playerClass->UpdatePosition();
 	
 
@@ -101,10 +99,10 @@ void Core::RenderEntities()
 	sf::Text tempText;
 	tempText.setFont(mainFont);
 	char text[200];
-	sprintf_s(text, "Pozycja gracza:\nX: %0.2f\nY: %0.2f", playerClass->GetPlayerSprite()->getPosition().x, playerClass->GetPlayerSprite()->getPosition().y);
+	sprintf_s(text, "Pozycja gracza:\nX: %0.2f\nY: %0.2f", playerClass->GetPlayerShape()->getPosition().x, playerClass->GetPlayerShape()->getPosition().y);
 	tempText.setString(text);
 	tempText.setCharacterSize(16);
-	tempText.setPosition(playerClass->GetPlayerSprite()->getPosition().x - mainWindow.getSize().x / 2 + 10, playerClass->GetPlayerSprite()->getPosition().y - mainWindow.getSize().y / 2 + 5);
+	tempText.setPosition(playerClass->GetPlayerShape()->getPosition().x - mainWindow.getSize().x / 2 + 10, playerClass->GetPlayerShape()->getPosition().y - mainWindow.getSize().y / 2 + 5);
 	mainWindow.draw(tempText);
 }
 

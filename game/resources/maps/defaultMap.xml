@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<map>
+    <tile id="0" breakable="false" x="0" y="0" collisions="false" />
+    <tile id="0" breakable="false" x="64" y="0" collisions="false" />
+    <tile id="0" breakable="false" x="200" y="0" collisions="true" />
+</map>
