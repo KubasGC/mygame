@@ -7,15 +7,13 @@ Player::Player()
 {
 	playerTexture.loadFromFile("resources/sprites/playersprite.png");
 	playerSprite.setTexture(playerTexture);
-	playerSprite.setTextureRect(sf::IntRect(0, 128, 16, 16));
-	playerShape.setSize(sf::Vector2f(16, 16));
+	playerSprite.setTextureRect(sf::IntRect(0, 512, 64, 64));
+	playerShape.setSize(sf::Vector2f(32, 32));
 	playerShape.setFillColor(sf::Color::Blue);
 
 	direction = 0;
 	animation = 0;
-	movementSpeed = 0.7f;
-
-
+	movementSpeed = 1.5f;
 
 	std::cout << "Player class has loaded\n";
 }
@@ -121,28 +119,28 @@ void Player::AnimateMove()
 	{
 	case 0: // Góra
 
-		playerSprite.setTextureRect(sf::IntRect(16 * tempAnim, 128, 16, 16));
+		playerSprite.setTextureRect(sf::IntRect(64 * tempAnim, 512, 64, 64));
 		if (!DoesPlayerHasCollision())
 			playerShape.move(0, (float)-movementSpeed);
 		break;
 
 	case 1: // Dó³
 
-		playerSprite.setTextureRect(sf::IntRect(16 * tempAnim, 160, 16, 16));
+		playerSprite.setTextureRect(sf::IntRect(64 * tempAnim, 640, 64, 64));
 		if (!DoesPlayerHasCollision())
 			playerShape.move(0, (float)movementSpeed);
 		break;
 
 	case 2: // Lewo
 
-		playerSprite.setTextureRect(sf::IntRect(16 * tempAnim, 144, 16, 16));
+		playerSprite.setTextureRect(sf::IntRect(64 * tempAnim, 576, 64, 64));
 		if (!DoesPlayerHasCollision())
 			playerShape.move((float)-movementSpeed, 0);
 
 		break;
 
 	case 3: // Prawo
-		playerSprite.setTextureRect(sf::IntRect(16 * tempAnim, 176, 16, 16));
+		playerSprite.setTextureRect(sf::IntRect(64 * tempAnim, 704, 64, 64));
 		if (!DoesPlayerHasCollision())
 			playerShape.move((float)movementSpeed, 0);
 

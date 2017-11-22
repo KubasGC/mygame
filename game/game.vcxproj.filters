@@ -53,13 +53,13 @@
     <Xml Include="resources\tiles\Floor.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="resources\sprites\playersprite.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="resources\tiles\forest_tiles.png">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="resources\tiles\Floor.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\sprites\playersprite.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

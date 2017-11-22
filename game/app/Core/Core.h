@@ -8,15 +8,21 @@ private:
 	sf::RenderWindow mainWindow;
 	sf::View mainCamera;
 	sf::Font mainFont;
-	Player* playerClass;
-
+	Player * playerClass;
 	int renderType;
 
-	// Renderowanie gry
+	void InitGame();
+	void InitEditor();
 
+	// Renderowanie gry
 	void GameRenderMap();
 	void GameRenderEntities();
 	void GameKeyboardEvents();
+
+	// Edytor map
+	sf::RectangleShape * editorShape;
+	void EditorRenderMap();
+	sf::Vector2i GetTileFromMouse();
 public:
 	Core();
 
@@ -24,7 +30,8 @@ public:
 	{
 		INTRO,
 		MENU,
-		GAME
+		GAME,
+		EDITOR
 	};
 
 	void Init();
