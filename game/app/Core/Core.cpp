@@ -48,6 +48,9 @@ void Core::Loop()
 
 		KeyboardEvents();
 
+		// Sprawdzanie kolizji gracza
+		PlayerCollisionDetection();
+
 		// Render
 		mainWindow.clear(sf::Color::Black);
 		RenderMap();
@@ -61,17 +64,35 @@ void Core::RenderMap()
 {
 	for (int i = 0; i < App::loadedMap.size(); i++)
 	{
-		sf::Sprite tempSprite = App::GetSpriteFromTexture(App::loadedMap[i]->textureId);
-		tempSprite.setPosition(sf::Vector2f((float) App::loadedMap[i]->posX, (float) App::loadedMap[i]->posY));
-		mainWindow.draw(tempSprite);
+		mainWindow.draw(App::loadedMap[i]->tileSprite);
+	}
+}
+
+void Core::PlayerCollisionDetection()
+{
+	// Sprawdzanie kolizji 
+	for (int i = 0; i < App::loadedMap.size(); i++)
+	{
+		if (App::loadedMap[i]->collisions && playerClass->GetPlayerShape()->getGlobalBounds().intersects(App::loadedMap[i]->tileSprite.getGlobalBounds()))
+		{
+			playerClass->ToggleMove(playerClass->GetDirection(), false);
+		}
 	}
 }
 
 void Core::RenderEntities()
 {
 	// Rysowanie playersprite
+	
+	mainCamera.setCenter(playerClass->GetPlayerShape()->getPosition());
+	
+	// mainWindow.draw(*(playerClass->GetPlayerShape()));
 	mainWindow.draw(*(playerClass->GetPlayerSprite()));
-	mainCamera.setCenter(playerClass->GetPlayerSprite()->getPosition());
+	
+	playerClass->UpdatePosition();
+	
+
+	sf::Sprite testSprite;
 
 	// Ustawianie kamery
 	mainWindow.setView(mainCamera);

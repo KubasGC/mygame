@@ -11,6 +11,7 @@ private:
 	Player* playerClass;
 
 	void RenderMap();
+	void PlayerCollisionDetection();
 	void RenderEntities();
 	void KeyboardEvents();
 public:

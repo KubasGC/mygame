@@ -65,6 +65,13 @@ void App::LoadMapFromFile(std::string fileName)
 					else
 						tempTile->breakable = false;
 				}
+				else if (!strcmp("collisions", attr->name()))
+				{
+					if (!strcmp("true", attr->value()))
+						tempTile->collisions = true;
+					else
+						tempTile->collisions = false;
+				}
 				else if (!strcmp("x", attr->name()))
 				{
 					tempTile->posX = atoi(attr->value());
@@ -74,6 +81,8 @@ void App::LoadMapFromFile(std::string fileName)
 					tempTile->posY = atoi(attr->value());
 				}
 			}
+			tempTile->tileSprite = GetSpriteFromTexture(tempTile->textureId);
+			tempTile->tileSprite.setPosition(sf::Vector2f(tempTile->posX, tempTile->posY));
 			loadedMap.push_back(tempTile);
 		}
 		child = child->next_sibling();
