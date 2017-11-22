@@ -9,21 +9,31 @@ Core::Core()
 void Core::Init()
 {
 	using namespace std;
-
+	
+	// £adowanie tekstur
 	cout << "Loading textures..." << endl;
 	App::LoadTextures();
 
+	// Tworzenie klasy gracza
 	playerClass = new Player();
 
+	// £adowanie mapy
+	App::LoadMapFromFile("resources/maps/defaultMap.xml");
+
+	// Wczytywanie czcionki
+	mainFont.loadFromFile("resources/fonts/BarlowSemiCondensed-Light.ttf");
+
+	// Tworzenie okna
 	mainWindow.create(sf::VideoMode(1366, 768), "Game");
 	mainWindow.setFramerateLimit(60);
 
-	mainCamera.setSize(sf::Vector2f(mainWindow.getSize().x, mainWindow.getSize().y));
+	// Ustawianie kamery
+	mainCamera.setSize(sf::Vector2f((float) mainWindow.getSize().x, (float) mainWindow.getSize().y));
 	mainCamera.setCenter(0, 0);
-
 	mainWindow.setView(mainCamera);
 }
 
+// G³ówna pêtla
 void Core::Loop()
 {
 	while (mainWindow.isOpen())
@@ -49,23 +59,32 @@ void Core::Loop()
 
 void Core::RenderMap()
 {
-	for (int i = 0; i < 1; i++)
+	for (int i = 0; i < App::loadedMap.size(); i++)
 	{
-		int x = 64 * i;
-		sf::Texture tempTexture;
-		sf::Sprite tempSprite = App::GetSpriteFromTexture(0);
-		tempSprite.setPosition(sf::Vector2f(x, 0));
-
+		sf::Sprite tempSprite = App::GetSpriteFromTexture(App::loadedMap[i]->textureId);
+		tempSprite.setPosition(sf::Vector2f((float) App::loadedMap[i]->posX, (float) App::loadedMap[i]->posY));
 		mainWindow.draw(tempSprite);
 	}
 }
 
 void Core::RenderEntities()
 {
-	// Draw player sprite
+	// Rysowanie playersprite
 	mainWindow.draw(*(playerClass->GetPlayerSprite()));
 	mainCamera.setCenter(playerClass->GetPlayerSprite()->getPosition());
+
+	// Ustawianie kamery
 	mainWindow.setView(mainCamera);
+
+	// Tekst (debug) z pozycj¹
+	sf::Text tempText;
+	tempText.setFont(mainFont);
+	char text[200];
+	sprintf_s(text, "Pozycja gracza:\nX: %0.2f\nY: %0.2f", playerClass->GetPlayerSprite()->getPosition().x, playerClass->GetPlayerSprite()->getPosition().y);
+	tempText.setString(text);
+	tempText.setCharacterSize(16);
+	tempText.setPosition(playerClass->GetPlayerSprite()->getPosition().x - mainWindow.getSize().x / 2 + 10, playerClass->GetPlayerSprite()->getPosition().y - mainWindow.getSize().y / 2 + 5);
+	mainWindow.draw(tempText);
 }
 
 void Core::KeyboardEvents()
