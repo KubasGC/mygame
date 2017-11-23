@@ -5,6 +5,8 @@
 #include <sstream>
 #include <string>
 
+#include "../Easing/Quad.h"
+
 #include "rapidxml/rapidxml.hpp"
 #include "rapidxml/rapidxml_print.hpp"
 
@@ -16,14 +18,44 @@ Core::Core()
 void Core::Init()
 {
 	// Tworzenie okna
-	mainWindow.create(sf::VideoMode(1366, 768), "Game by Kubas");
+	mainWindow.create(sf::VideoMode(1366, 768), "Game by Kubas", !sf::Style::Resize | sf::Style::Close | sf::Style::Titlebara);
 	mainWindow.setFramerateLimit(60);
 	mainWindow.setVerticalSyncEnabled(true);
 
-	// Ustawienie typu renderowanego obiektu
-	renderType = RenderType::GAME;
 
-	InitGame();
+	// £adowanie czcionek
+	std::string Files[1] =
+	{
+		std::string("resources/fonts/Roboto-Light.ttf") // 0
+	};
+	for (int file = 0; file < 1; file++)
+	{
+		sf::Font * tempFont = new sf::Font();
+		tempFont->loadFromFile(Files[file].c_str());
+		loadedFonts.push_back(tempFont);
+		std::cout << "Zaladowano czcionke " << Files[file].c_str() << ".\n";
+	}
+
+
+	// Ustawienie typu renderowanego obiektu
+	renderType = RenderType::INTRO;
+
+	// Wprowadzenie danych ustawieñ
+
+	switch (renderType)
+	{
+		case RenderType::GAME:
+			InitGame();
+			break;
+
+		case RenderType::EDITOR:
+			InitEditor();
+			break;
+
+		case RenderType::INTRO:
+			InitIntro();
+			break;
+	}
 }
 
 void Core::InitGame()
@@ -82,6 +114,12 @@ void Core::InitEditor()
 	editorSprite.setPosition(sf::Vector2f(0.0f, 0.0f));
 
 	mainCamera.setSize(sf::Vector2f((float)mainWindow.getSize().x, (float)mainWindow.getSize().y));
+}
+
+void Core::InitIntro()
+{
+	introStep = 1;
+	introClock.restart();
 }
 
 // G³ówna pêtla
@@ -189,8 +227,111 @@ void Core::Loop()
 			// Wyœwietlenie klatki
 			mainWindow.display();
 		}
+		else if (renderType == RenderType::INTRO)
+		{
+			// Czyszczenie okna
+			mainWindow.clear(sf::Color::Black);
+			if (introStep == 1)
+			{
+				sf::Time elapsedTime = introClock.getElapsedTime();
+				float progress = elapsedTime.asMilliseconds() / 500;
+				if (progress > 1)
+				{
+					introStep = 2;
+					introClock.restart();
+				}
+			}
+			else if (introStep == 2)
+			{
+				sf::Time elapsedTime = introClock.getElapsedTime();
+				float progress = (float) elapsedTime.asMilliseconds() / (float) 3000;
+
+				sf::Text myText;
+				myText.setFont(*loadedFonts[0]);
+				myText.setString("Kubas");
+				float progressingAlpha = Quad::easeInOut(progress, 0.0f, 255.0f, 1.0f);
+				if (progress >= 1)
+					progressingAlpha = 255.0f;
+				myText.setFillColor(sf::Color(255, 255, 255, progressingAlpha));
+				myText.setCharacterSize(80);
+				myText.setPosition(sf::Vector2f(mainWindow.getSize().x / 2 - myText.getGlobalBounds().width / 2, mainWindow.getSize().y / 2 - myText.getGlobalBounds().height / 2));
+				mainWindow.draw(myText);
+
+				if (progress > 1)
+				{
+					introStep = 3;
+					introClock.restart();
+				}
+			}
+			else if (introStep == 3)
+			{
+				sf::Time elapsedTime = introClock.getElapsedTime();
+				float progress = (float)elapsedTime.asMilliseconds() / (float)3000;
+
+				sf::Text myText;
+				myText.setFont(*loadedFonts[0]);
+				myText.setString("Kubas");
+				myText.setFillColor(sf::Color(255, 255, 255, 255));
+				myText.setCharacterSize(80);
+				myText.setPosition(sf::Vector2f(mainWindow.getSize().x / 2 - myText.getGlobalBounds().width / 2, mainWindow.getSize().y / 2 - myText.getGlobalBounds().height / 2));
+				mainWindow.draw(myText);
+
+				float progressingAlpha = Quad::easeInOut(progress, 0.0f, 1.0f, 1.0f);
+
+				sf::Text secondText;
+				secondText.setFont(*loadedFonts[0]);
+				secondText.setCharacterSize(25);
+				secondText.setString("prezentuje...");
+				secondText.setFillColor(sf::Color(255, 255, 255, (float)220 * (float)progressingAlpha));
+				secondText.setPosition(sf::Vector2f(myText.getGlobalBounds().left + (progressingAlpha * 100), myText.getGlobalBounds().top + 60));
+				mainWindow.draw(secondText);
+
+				if (progress > 1)
+				{
+					introStep = 4;
+					introClock.restart();
+				}
+			}
+			else if (introStep == 4)
+			{
+				sf::Time elapsedTime = introClock.getElapsedTime();
+				float progress = (float)elapsedTime.asMilliseconds() / (float)3000;
+
+				float alpha = (float) Quad::easeInOut(progress, 255.0f, -255.0f, 1.0f);
+
+				sf::Text myText;
+				myText.setFont(*loadedFonts[0]);
+				myText.setString("Kubas");
+				myText.setFillColor(sf::Color(255, 255, 255, alpha));
+				myText.setCharacterSize(80);
+				myText.setPosition(sf::Vector2f(mainWindow.getSize().x / 2 - myText.getGlobalBounds().width / 2, mainWindow.getSize().y / 2 - myText.getGlobalBounds().height / 2));
+				mainWindow.draw(myText);
+
+				sf::Text secondText;
+				secondText.setFont(*loadedFonts[0]);
+				secondText.setCharacterSize(25);
+				secondText.setString("prezentuje...");
+				secondText.setFillColor(sf::Color(255, 255, 255, alpha));
+				secondText.setPosition(sf::Vector2f(myText.getGlobalBounds().left + 100, myText.getGlobalBounds().top + 60));
+				mainWindow.draw(secondText);
+
+				if (progress > 1)
+				{
+					introStep = 5;
+				}
+			}
+			else if (introStep == 5)
+			{
+				renderType = RenderType::GAME;
+				InitGame();
+			}
+			// Wyœwietlenie klatki
+			mainWindow.display();
+		}
 	}
 }
+
+#pragma region GAME
 
 void Core::GameRenderMap()
 {
@@ -238,6 +379,10 @@ void Core::GameKeyboardEvents()
 		playerClass->AnimateMove();
 	}
 }
+
+#pragma endregion
+
+#pragma region EDITOR
 
 void Core::EditorRenderMap()
 {
@@ -325,6 +470,12 @@ void Core::EditorMouseEvents()
 			editorRightButtonPressed = false;
 	}
 }
+
+#pragma endregion
+
+#pragma region INTRO
+
+#pragma endregion
 
 sf::Vector2i Core::GetTileFromMouse()
 {

@@ -146,18 +146,42 @@
   <ItemGroup>
     <ClCompile Include="app\app.cpp" />
     <ClCompile Include="app\Core\Core.cpp" />
-    <ClCompile Include="game.cpp" />
+    <ClCompile Include="app\Easing\Back.cpp" />
+    <ClCompile Include="app\Easing\Bounce.cpp" />
+    <ClCompile Include="app\Easing\Circ.cpp" />
+    <ClCompile Include="app\Easing\Cubic.cpp" />
+    <ClCompile Include="app\Easing\Elastic.cpp" />
+    <ClCompile Include="app\Easing\Expo.cpp" />
+    <ClCompile Include="app\Easing\Linear.cpp" />
+    <ClCompile Include="app\Easing\Quad.cpp" />
+    <ClCompile Include="app\Easing\Quart.cpp" />
+    <ClCompile Include="app\Easing\Quint.cpp" />
+    <ClCompile Include="app\Easing\Sine.cpp" />
     <ClCompile Include="app\Entities\Player.cpp" />
+    <ClCompile Include="game.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app\app.h" />
     <ClInclude Include="app\Core\Core.h" />
+    <ClInclude Include="app\Easing\Back.h" />
+    <ClInclude Include="app\Easing\Bounce.h" />
+    <ClInclude Include="app\Easing\Circ.h" />
+    <ClInclude Include="app\Easing\Cubic.h" />
+    <ClInclude Include="app\Easing\Elastic.h" />
+    <ClInclude Include="app\Easing\Expo.h" />
+    <ClInclude Include="app\Easing\Linear.h" />
+    <ClInclude Include="app\Easing\Quad.h" />
+    <ClInclude Include="app\Easing\Quart.h" />
+    <ClInclude Include="app\Easing\Quint.h" />
+    <ClInclude Include="app\Easing\Sine.h" />
     <ClInclude Include="app\Textures\Texture.h" />
     <ClInclude Include="app\Entities\Player.h" />
     <ClInclude Include="app\Tiles\Tile.h" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="resources\fonts\BarlowSemiCondensed-Light.ttf" />
+    <Font Include="resources\fonts\Roboto-Light.ttf" />
+    <Font Include="resources\fonts\Roboto-Regular.ttf" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="resources\maps\defaultMap.xml" />

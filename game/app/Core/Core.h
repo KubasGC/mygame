@@ -11,6 +11,8 @@ private:
 	Player * playerClass;
 	int renderType;
 
+	std::vector<sf::Font *> loadedFonts;
+
 	void InitGame();
 	void InitEditor();
 
@@ -29,6 +31,12 @@ private:
 	void EditorRenderMap();
 	void EditorMouseEvents();
 	sf::Vector2i GetTileFromMouse();
+
+	// Intro
+	int introStep;
+	sf::Clock introClock;
+
+	void InitIntro();
 public:
 	Core();
 
