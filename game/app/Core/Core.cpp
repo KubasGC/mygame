@@ -21,9 +21,9 @@ void Core::Init()
 	mainWindow.setVerticalSyncEnabled(true);
 
 	// Ustawienie typu renderowanego obiektu
-	renderType = RenderType::EDITOR;
+	renderType = RenderType::GAME;
 
-	InitEditor();
+	InitGame();
 }
 
 void Core::InitGame()
@@ -67,13 +67,21 @@ void Core::InitEditor()
 	editorShape->setSize(sf::Vector2f((float)64, (float)64));
 	editorShape->setFillColor(sf::Color::White);
 
+	// Tworzenie RectangleShape do view.
+	editorCenterShape = new sf::RectangleShape();
+	editorCenterShape->setSize(sf::Vector2f((float)64, (float)64));
+	editorShape->setPosition(0.0f, 0.0f);
+
+	// £adowanie mapy
+	App::LoadMapFromFile("resources/maps/defaultMap.xml");
+
 	// Tworzenie Sprite
 	editorSprite = App::GetSpriteFromTexture(editorChoosedTexture);
 	editorSprite.setScale(4, 4);
 	editorSprite.setColor(sf::Color(255, 255, 255, 100));
+	editorSprite.setPosition(sf::Vector2f(0.0f, 0.0f));
 
-	// £adowanie mapy
-	App::LoadMapFromFile("resources/maps/defaultMap.xml");
+	mainCamera.setSize(sf::Vector2f((float)mainWindow.getSize().x, (float)mainWindow.getSize().y));
 }
 
 // G³ówna pêtla
@@ -173,6 +181,11 @@ void Core::Loop()
 			// Render mapy
 			EditorRenderMap();
 
+			mainCamera.setCenter(editorCenterShape->getPosition());
+
+			// Ustawianie kamery
+			mainWindow.setView(mainCamera);
+
 			// Wyœwietlenie klatki
 			mainWindow.display();
 		}
@@ -242,6 +255,24 @@ void Core::EditorRenderMap()
 
 void Core::EditorMouseEvents()
 {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+	{
+		
+		editorCenterShape->move(0.0f, -5.0f);
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+	{
+		editorCenterShape->move(0.0f, 5.0f);
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	{
+		editorCenterShape->move(-5.0f, 0.0f);
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	{
+		editorCenterShape->move(5.0f, 0.0f);
+	}
+
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
 	{
 		sf::Vector2i tilePosition = GetTileFromMouse();

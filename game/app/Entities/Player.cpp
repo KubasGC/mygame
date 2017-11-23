@@ -110,10 +110,25 @@ int Player::GetDirection()
 void Player::AnimateMove()
 {
 	animation++;
-	if (animation > 32)
-		animation = 0;
 
-	int tempAnim = (int)floor(animation / 4);
+	int tempAnim;
+	float tempSpeed = (float)movementSpeed;
+
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+	{
+		tempSpeed *= 2;
+
+		if (animation > 16)
+			animation = 0;
+		tempAnim = (int)floor(animation / 2);
+	}
+	else
+	{
+		if (animation > 32)
+			animation = 0;
+		tempAnim = (int)floor(animation / 4);
+	}
 
 	switch (direction)
 	{
@@ -121,28 +136,28 @@ void Player::AnimateMove()
 
 		playerSprite.setTextureRect(sf::IntRect(64 * tempAnim, 512, 64, 64));
 		if (!DoesPlayerHasCollision())
-			playerShape.move(0, (float)-movementSpeed);
+			playerShape.move(0, (float)-tempSpeed);
 		break;
 
 	case 1: // Dó³
 
 		playerSprite.setTextureRect(sf::IntRect(64 * tempAnim, 640, 64, 64));
 		if (!DoesPlayerHasCollision())
-			playerShape.move(0, (float)movementSpeed);
+			playerShape.move(0, (float)tempSpeed);
 		break;
 
 	case 2: // Lewo
 
 		playerSprite.setTextureRect(sf::IntRect(64 * tempAnim, 576, 64, 64));
 		if (!DoesPlayerHasCollision())
-			playerShape.move((float)-movementSpeed, 0);
+			playerShape.move((float)-tempSpeed, 0);
 
 		break;
 
 	case 3: // Prawo
 		playerSprite.setTextureRect(sf::IntRect(64 * tempAnim, 704, 64, 64));
 		if (!DoesPlayerHasCollision())
-			playerShape.move((float)movementSpeed, 0);
+			playerShape.move((float)tempSpeed, 0);
 
 		break;
 	}

@@ -21,6 +21,7 @@ private:
 
 	// Edytor map
 	sf::RectangleShape * editorShape;
+	sf::RectangleShape * editorCenterShape;
 	sf::Sprite editorSprite;
 	int editorChoosedTexture;
 	bool editorRightButtonPressed;
