@@ -12,4 +12,16 @@
   <texture left="112" top="128" width="16" height="16" />
   <texture left="128" top="128" width="16" height="16" />
   <texture left="144" top="128" width="16" height="16" />
+
+  <texture left="0" top="96" width="16" height="16" />
+  <texture left="16" top="96" width="16" height="16" />
+  <texture left="32" top="96" width="16" height="16" />
+
+  <texture left="0" top="112" width="16" height="16" />
+  <texture left="16" top="112" width="16" height="16" />
+  <texture left="32" top="112" width="16" height="16" />
+
+  <texture left="0" top="128" width="16" height="16" />
+  <texture left="16" top="128" width="16" height="16" />
+  <texture left="32" top="128" width="16" height="16" />
 </textures>

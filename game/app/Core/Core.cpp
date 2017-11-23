@@ -111,7 +111,6 @@ void Core::Loop()
 					xml_node<>* child = doc.allocate_node(node_element, "tile");
 					ss << App::loadedMap[i]->textureId;
 
-					std::cout << ss.str();
 					child->append_attribute(doc.allocate_attribute("id", doc.allocate_string(ss.str().c_str())));
 					child->append_attribute(doc.allocate_attribute("breakable", "false"));
 					ss.str("");
@@ -145,6 +144,9 @@ void Core::Loop()
 			// Czyszczenie okna
 			mainWindow.clear(sf::Color::Black);
 
+			// Render mapy
+			GameRenderMap();
+
 			// Tekst (debug) z pozycj¹
 			sf::Text tempText;
 			tempText.setFont(mainFont);
@@ -158,8 +160,6 @@ void Core::Loop()
 			// Eventy klawiatury
 			GameKeyboardEvents();
 
-			// Render mapy
-			GameRenderMap();
 
 			// Render obiektów
 			GameRenderEntities();
