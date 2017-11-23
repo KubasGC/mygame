@@ -103,7 +103,7 @@ sf::Sprite App::GetSpriteFromTexture(int textureId)
 void App::LoadMapFromFile(std::string fileName)
 {
 
-	for (int i = 0; i < loadedMap.size(); i++)
+	for (int i = 0; i < (int) loadedMap.size(); i++)
 	{
 		delete(loadedMap[i]);
 	}
@@ -155,8 +155,8 @@ void App::LoadMapFromFile(std::string fileName)
 				}
 			}
 			tempTile->tileSprite = GetSpriteFromTexture(tempTile->textureId);
-			tempTile->tileSprite.setScale(tempTile->scale, tempTile->scale);
-			tempTile->tileSprite.setPosition(sf::Vector2f(tempTile->posX, tempTile->posY));
+			tempTile->tileSprite.setScale((float)tempTile->scale, (float)tempTile->scale);
+			tempTile->tileSprite.setPosition(sf::Vector2f((float)tempTile->posX, (float)tempTile->posY));
 			loadedMap.push_back(tempTile);
 		}
 		child = child->next_sibling();
@@ -165,7 +165,7 @@ void App::LoadMapFromFile(std::string fileName)
 
 Tile * App::GetTextureFromPosition(int left, int top)
 {
-	for (int i = 0; i < loadedMap.size(); i++)
+	for (int i = 0; i < (int)loadedMap.size(); i++)
 	{
 		if (loadedMap[i]->posX == left && loadedMap[i]->posY == top)
 			return loadedMap[i];

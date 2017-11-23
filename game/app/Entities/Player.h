@@ -23,7 +23,7 @@ public:
 
 	void SetDirection(int dir);
 	int GetDirection();
-	int GetMovementSpeed() { return movementSpeed; }
+	float GetMovementSpeed() { return movementSpeed; }
 	void AnimateMove();
 	void UpdatePosition();
 };

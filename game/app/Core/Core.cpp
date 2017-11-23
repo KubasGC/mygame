@@ -18,7 +18,7 @@ Core::Core()
 void Core::Init()
 {
 	// Tworzenie okna
-	mainWindow.create(sf::VideoMode(1366, 768), "Game by Kubas", !sf::Style::Resize | sf::Style::Close | sf::Style::Titlebara);
+	mainWindow.create(sf::VideoMode(1366, 768), "Game by Kubas", !sf::Style::Resize | sf::Style::Close | sf::Style::Titlebar);
 	mainWindow.setFramerateLimit(60);
 	mainWindow.setVerticalSyncEnabled(true);
 
@@ -44,17 +44,17 @@ void Core::Init()
 
 	switch (renderType)
 	{
-		case RenderType::GAME:
-			InitGame();
-			break;
+	case RenderType::GAME:
+		InitGame();
+		break;
 
-		case RenderType::EDITOR:
-			InitEditor();
-			break;
+	case RenderType::EDITOR:
+		InitEditor();
+		break;
 
-		case RenderType::INTRO:
-			InitIntro();
-			break;
+	case RenderType::INTRO:
+		InitIntro();
+		break;
 	}
 }
 
@@ -143,7 +143,7 @@ void Core::Loop()
 				xml_node<>* root = doc.allocate_node(node_element, "map");
 				doc.append_node(root);
 
-				for (int i = 0; i < App::loadedMap.size(); i++)
+				for (int i = 0; i < (int)App::loadedMap.size(); i++)
 				{
 					std::ostringstream ss;
 					xml_node<>* child = doc.allocate_node(node_element, "tile");
@@ -165,7 +165,7 @@ void Core::Loop()
 					child->append_attribute(doc.allocate_attribute("scale", doc.allocate_string(ss.str().c_str())));
 					child->append_attribute(doc.allocate_attribute("collisions", "false"));
 					root->append_node(child);
-					
+
 				}
 
 				std::ofstream file_stored("storedMap.xml");
@@ -234,7 +234,7 @@ void Core::Loop()
 			if (introStep == 1)
 			{
 				sf::Time elapsedTime = introClock.getElapsedTime();
-				float progress = elapsedTime.asMilliseconds() / 500;
+				float progress = (float)(elapsedTime.asMilliseconds() / 500);
 				if (progress > 1)
 				{
 					introStep = 2;
@@ -244,7 +244,7 @@ void Core::Loop()
 			else if (introStep == 2)
 			{
 				sf::Time elapsedTime = introClock.getElapsedTime();
-				float progress = (float) elapsedTime.asMilliseconds() / (float) 3000;
+				float progress = (float)elapsedTime.asMilliseconds() / (float)3000;
 
 				sf::Text myText;
 				myText.setFont(*loadedFonts[0]);
@@ -252,7 +252,7 @@ void Core::Loop()
 				float progressingAlpha = Quad::easeInOut(progress, 0.0f, 255.0f, 1.0f);
 				if (progress >= 1)
 					progressingAlpha = 255.0f;
-				myText.setFillColor(sf::Color(255, 255, 255, progressingAlpha));
+				myText.setFillColor(sf::Color(255, 255, 255, (sf::Uint8) progressingAlpha));
 				myText.setCharacterSize(80);
 				myText.setPosition(sf::Vector2f(mainWindow.getSize().x / 2 - myText.getGlobalBounds().width / 2, mainWindow.getSize().y / 2 - myText.getGlobalBounds().height / 2));
 				mainWindow.draw(myText);
@@ -282,7 +282,7 @@ void Core::Loop()
 				secondText.setFont(*loadedFonts[0]);
 				secondText.setCharacterSize(25);
 				secondText.setString("prezentuje...");
-				secondText.setFillColor(sf::Color(255, 255, 255, (float)220 * (float)progressingAlpha));
+				secondText.setFillColor(sf::Color(255, 255, 255, (sf::Uint8)(220 * progressingAlpha)));
 				secondText.setPosition(sf::Vector2f(myText.getGlobalBounds().left + (progressingAlpha * 100), myText.getGlobalBounds().top + 60));
 				mainWindow.draw(secondText);
 
@@ -297,12 +297,12 @@ void Core::Loop()
 				sf::Time elapsedTime = introClock.getElapsedTime();
 				float progress = (float)elapsedTime.asMilliseconds() / (float)3000;
 
-				float alpha = (float) Quad::easeInOut(progress, 255.0f, -255.0f, 1.0f);
+				float alpha = (float)Quad::easeInOut(progress, 255.0f, -255.0f, 1.0f);
 
 				sf::Text myText;
 				myText.setFont(*loadedFonts[0]);
 				myText.setString("Kubas");
-				myText.setFillColor(sf::Color(255, 255, 255, alpha));
+				myText.setFillColor(sf::Color(255, 255, 255, (sf::Uint8)alpha));
 				myText.setCharacterSize(80);
 				myText.setPosition(sf::Vector2f(mainWindow.getSize().x / 2 - myText.getGlobalBounds().width / 2, mainWindow.getSize().y / 2 - myText.getGlobalBounds().height / 2));
 				mainWindow.draw(myText);
@@ -311,7 +311,7 @@ void Core::Loop()
 				secondText.setFont(*loadedFonts[0]);
 				secondText.setCharacterSize(25);
 				secondText.setString("prezentuje...");
-				secondText.setFillColor(sf::Color(255, 255, 255, alpha));
+				secondText.setFillColor(sf::Color(255, 255, 255, (sf::Uint8)alpha));
 				secondText.setPosition(sf::Vector2f(myText.getGlobalBounds().left + 100, myText.getGlobalBounds().top + 60));
 				mainWindow.draw(secondText);
 
@@ -335,7 +335,7 @@ void Core::Loop()
 
 void Core::GameRenderMap()
 {
-	for (int i = 0; i < App::loadedMap.size(); i++)
+	for (int i = 0; i < (int)App::loadedMap.size(); i++)
 	{
 		mainWindow.draw(App::loadedMap[i]->tileSprite);
 	}
@@ -386,7 +386,7 @@ void Core::GameKeyboardEvents()
 
 void Core::EditorRenderMap()
 {
-	for (int i = 0; i < App::loadedMap.size(); i++)
+	for (int i = 0; i < (int)App::loadedMap.size(); i++)
 	{
 		mainWindow.draw(App::loadedMap[i]->tileSprite);
 	}
@@ -402,7 +402,7 @@ void Core::EditorMouseEvents()
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	{
-		
+
 		editorCenterShape->move(0.0f, -5.0f);
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
@@ -434,8 +434,8 @@ void Core::EditorMouseEvents()
 			newTile->collisions = false;
 			newTile->textureId = editorChoosedTexture;
 			newTile->tileSprite = App::GetSpriteFromTexture(newTile->textureId);
-			newTile->tileSprite.setScale(newTile->scale, newTile->scale);
-			newTile->tileSprite.setPosition(sf::Vector2f(newTile->posX, newTile->posY));
+			newTile->tileSprite.setScale((float)newTile->scale, (float)newTile->scale);
+			newTile->tileSprite.setPosition(sf::Vector2f((float)newTile->posX, (float)newTile->posY));
 
 			App::loadedMap.push_back(newTile);
 		}
@@ -443,8 +443,8 @@ void Core::EditorMouseEvents()
 		{
 			aliveTile->textureId = editorChoosedTexture;
 			aliveTile->tileSprite = App::GetSpriteFromTexture(aliveTile->textureId);
-			aliveTile->tileSprite.setScale(aliveTile->scale, aliveTile->scale);
-			aliveTile->tileSprite.setPosition(sf::Vector2f(aliveTile->posX, aliveTile->posY));
+			aliveTile->tileSprite.setScale((float)aliveTile->scale, (float)aliveTile->scale);
+			aliveTile->tileSprite.setPosition(sf::Vector2f((float)aliveTile->posX, (float)aliveTile->posY));
 		}
 	}
 
@@ -454,7 +454,7 @@ void Core::EditorMouseEvents()
 		{
 			editorChoosedTexture++;
 
-			if (editorChoosedTexture + 1 > App::loadedTextures.size())
+			if (editorChoosedTexture + 1 > (int)App::loadedTextures.size())
 				editorChoosedTexture = 0;
 
 			editorSprite = App::GetSpriteFromTexture(editorChoosedTexture);
