@@ -1,30 +1,9 @@
 #pragma once
+#include "Entity.h"
 #include <SFML/Graphics.hpp>
-class Player
+class Player : public Entity
 {
-private:
-	sf::Texture playerTexture;
-	sf::Sprite playerSprite;
-	sf::RectangleShape playerShape;
-
-	int direction;
-	int animation;
-	float movementSpeed;
-
-	void ChangeAngle();
-
-	bool DoesPlayerHasCollision();
 public:
 	Player();
-	~Player();
-
-	sf::Sprite* GetPlayerSprite();
-	sf::Shape* GetPlayerShape();
-
-	void SetDirection(int dir);
-	int GetDirection();
-	float GetMovementSpeed() { return movementSpeed; }
-	void AnimateMove();
-	void UpdatePosition();
 };
 

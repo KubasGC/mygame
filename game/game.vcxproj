@@ -158,6 +158,7 @@
     <ClCompile Include="app\Easing\Quint.cpp" />
     <ClCompile Include="app\Easing\Sine.cpp" />
     <ClCompile Include="app\Entities\Player.cpp" />
+    <ClCompile Include="app\Entities\Entity.cpp" />
     <ClCompile Include="game.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -177,6 +178,7 @@
     <ClInclude Include="app\Textures\Texture.h" />
     <ClInclude Include="app\Entities\Player.h" />
     <ClInclude Include="app\Tiles\Tile.h" />
+    <ClInclude Include="app\Entities\Entity.h" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="resources\fonts\BarlowSemiCondensed-Light.ttf" />

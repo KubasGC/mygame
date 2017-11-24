@@ -189,10 +189,10 @@ void Core::Loop()
 			sf::Text tempText;
 			tempText.setFont(mainFont);
 			char text[200];
-			sprintf_s(text, "Pozycja gracza:\nX: %0.2f\nY: %0.2f", playerClass->GetPlayerShape()->getPosition().x, playerClass->GetPlayerShape()->getPosition().y);
+			sprintf_s(text, "Pozycja gracza:\nX: %0.2f\nY: %0.2f", playerClass->getEntityShape()->getPosition().x, playerClass->getEntityShape()->getPosition().y);
 			tempText.setString(text);
 			tempText.setCharacterSize(20);
-			tempText.setPosition(sf::Vector2f(playerClass->GetPlayerShape()->getPosition().x - mainWindow.getSize().x / 2, playerClass->GetPlayerShape()->getPosition().y - mainWindow.getSize().y / 2));
+			tempText.setPosition(sf::Vector2f(playerClass->getEntityShape()->getPosition().x - mainWindow.getSize().x / 2, playerClass->getEntityShape()->getPosition().y - mainWindow.getSize().y / 2));
 			mainWindow.draw(tempText);
 
 			// Eventy klawiatury
@@ -345,9 +345,9 @@ void Core::GameRenderEntities()
 {
 
 	// Rysowanie playersprite
-	mainCamera.setCenter(playerClass->GetPlayerShape()->getPosition());
+	mainCamera.setCenter(playerClass->getEntityShape()->getPosition());
 	// mainWindow.draw(*(playerClass->GetPlayerShape()));
-	mainWindow.draw(*(playerClass->GetPlayerSprite()));
+	mainWindow.draw(*(playerClass->getEntitySprite()));
 	// Odœwie¿eni pozycji gracza (sprite)f
 	playerClass->UpdatePosition();
 
@@ -360,22 +360,22 @@ void Core::GameKeyboardEvents()
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	{
-		playerClass->SetDirection(0);
+		playerClass->setDirection(0);
 		playerClass->AnimateMove();
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
-		playerClass->SetDirection(1);
+		playerClass->setDirection(1);
 		playerClass->AnimateMove();
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
-		playerClass->SetDirection(2);
+		playerClass->setDirection(2);
 		playerClass->AnimateMove();
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
-		playerClass->SetDirection(3);
+		playerClass->setDirection(3);
 		playerClass->AnimateMove();
 	}
 }
