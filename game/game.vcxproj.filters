@@ -142,6 +142,18 @@
     <Image Include="resources\sprites\playersprite.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="resources\UI\char_bg.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\UI\health_bg.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\UI\mana_bg.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\UI\health_bar.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\sounds\prologue.ogg" />

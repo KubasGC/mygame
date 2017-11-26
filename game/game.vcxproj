@@ -195,6 +195,10 @@
     <Image Include="resources\sprites\playersprite.png" />
     <Image Include="resources\tiles\Floor.png" />
     <Image Include="resources\tiles\forest_tiles.png" />
+    <Image Include="resources\UI\char_bg.png" />
+    <Image Include="resources\UI\health_bar.png" />
+    <Image Include="resources\UI\health_bg.png" />
+    <Image Include="resources\UI\mana_bg.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\sounds\no-more-magic.ogg" />

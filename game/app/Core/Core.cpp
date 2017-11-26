@@ -6,6 +6,7 @@
 #include <string>
 
 #include "../Easing/Quad.h"
+#include "../Easing/Linear.h"
 
 #include "rapidxml/rapidxml.hpp"
 #include "rapidxml/rapidxml_print.hpp"
@@ -91,6 +92,8 @@ void Core::InitEditor()
 {
 	using namespace std;
 
+	MusicSystem::PlayMusic("resources/sounds/prologue.ogg");
+
 	cout << "Editor init...\n\n\n";
 
 	// Ustawianie wybranej tekstury
@@ -149,46 +152,52 @@ void Core::Loop()
 		{
 			if (event.type == sf::Event::Closed)
 			{
-				using namespace rapidxml;
-				xml_document<> doc;
-				xml_node<>* decl = doc.allocate_node(node_declaration);
-				decl->append_attribute(doc.allocate_attribute("version", "1.0"));
-				decl->append_attribute(doc.allocate_attribute("encoding", "utf-8"));
-				doc.append_node(decl);
-
-				xml_node<>* root = doc.allocate_node(node_element, "map");
-				doc.append_node(root);
-
-				for (int i = 0; i < (int)App::loadedMap.size(); i++)
+				if (renderType == RenderType::EDITOR)
 				{
-					std::ostringstream ss;
-					xml_node<>* child = doc.allocate_node(node_element, "tile");
-					ss << App::loadedMap[i]->textureId;
+					using namespace rapidxml;
+					xml_document<> doc;
+					xml_node<>* decl = doc.allocate_node(node_declaration);
+					decl->append_attribute(doc.allocate_attribute("version", "1.0"));
+					decl->append_attribute(doc.allocate_attribute("encoding", "utf-8"));
+					doc.append_node(decl);
 
-					child->append_attribute(doc.allocate_attribute("id", doc.allocate_string(ss.str().c_str())));
-					child->append_attribute(doc.allocate_attribute("breakable", "false"));
-					ss.str("");
-					ss.clear();
-					ss << App::loadedMap[i]->posX;
-					child->append_attribute(doc.allocate_attribute("x", doc.allocate_string(ss.str().c_str())));
-					ss.str("");
-					ss.clear();
-					ss << App::loadedMap[i]->posY;
-					child->append_attribute(doc.allocate_attribute("y", doc.allocate_string(ss.str().c_str())));
-					ss.str("");
-					ss.clear();
-					ss << App::loadedMap[i]->scale;
-					child->append_attribute(doc.allocate_attribute("scale", doc.allocate_string(ss.str().c_str())));
-					child->append_attribute(doc.allocate_attribute("collisions", "false"));
-					root->append_node(child);
+					xml_node<>* root = doc.allocate_node(node_element, "map");
+					doc.append_node(root);
 
+					for (int i = 0; i < (int)App::loadedMap.size(); i++)
+					{
+						std::ostringstream ss;
+						xml_node<>* child = doc.allocate_node(node_element, "tile");
+						ss << App::loadedMap[i]->textureId;
+
+						child->append_attribute(doc.allocate_attribute("id", doc.allocate_string(ss.str().c_str())));
+						child->append_attribute(doc.allocate_attribute("breakable", "false"));
+						ss.str("");
+						ss.clear();
+						ss << App::loadedMap[i]->posX;
+						child->append_attribute(doc.allocate_attribute("x", doc.allocate_string(ss.str().c_str())));
+						ss.str("");
+						ss.clear();
+						ss << App::loadedMap[i]->posY;
+						child->append_attribute(doc.allocate_attribute("y", doc.allocate_string(ss.str().c_str())));
+						ss.str("");
+						ss.clear();
+						ss << App::loadedMap[i]->scale;
+						child->append_attribute(doc.allocate_attribute("scale", doc.allocate_string(ss.str().c_str())));
+						child->append_attribute(doc.allocate_attribute("collisions", App::loadedMap[i]->collisions ? "true" : "false"));
+						root->append_node(child);
+					}
+
+					std::ofstream file_stored("storedMap.xml");
+					file_stored << doc;
+					file_stored.close();
+					doc.clear();
 				}
-
-				std::ofstream file_stored("storedMap.xml");
-				file_stored << doc;
-				file_stored.close();
-				doc.clear();
 				mainWindow.close();
+			}
+			else if (event.type == sf::Event::KeyPressed)
+			{
+				OnKeyPressed(&event);
 			}
 		}
 
@@ -202,14 +211,14 @@ void Core::Loop()
 			GameRenderMap();
 
 			// Tekst (debug) z pozycj¹
-			sf::Text tempText;
+			/*sf::Text tempText;
 			tempText.setFont(mainFont);
 			char text[200];
 			sprintf_s(text, "Pozycja gracza:\nX: %0.2f\nY: %0.2f", playerClass->getEntityShape()->getPosition().x, playerClass->getEntityShape()->getPosition().y);
 			tempText.setString(text);
 			tempText.setCharacterSize(20);
 			tempText.setPosition(sf::Vector2f(playerClass->getEntityShape()->getPosition().x - mainWindow.getSize().x / 2, playerClass->getEntityShape()->getPosition().y - mainWindow.getSize().y / 2));
-			mainWindow.draw(tempText);
+			mainWindow.draw(tempText);*/
 
 			// Eventy klawiatury
 			GameKeyboardEvents();
@@ -217,6 +226,9 @@ void Core::Loop()
 
 			// Render obiektów
 			GameRenderEntities();
+
+			// Wyœwietlanie HUDa
+			GameRenderHUD();
 
 			// Ustawianie kamery
 			mainWindow.setView(mainCamera);
@@ -237,6 +249,9 @@ void Core::Loop()
 
 			// Render mapy
 			EditorRenderMap();
+
+			// Render informacji
+			EditorRenderInfo();
 
 			mainCamera.setCenter(editorCenterShape->getPosition());
 
@@ -311,6 +326,7 @@ void Core::Loop()
 				{
 					introStep = 4;
 					introClock.restart();
+					MusicSystem::PlayMusic("resources/sounds/no-more-magic.ogg", 3000, false);
 				}
 			}
 			else if (introStep == 4)
@@ -346,7 +362,6 @@ void Core::Loop()
 				SetFade(false);
 				renderType = RenderType::GAME;
 				FadeIn(2000);
-				MusicSystem::PlayMusic("resources/sounds/no-more-magic.ogg", false);
 				InitGame();
 			}
 			// Wyœwietlenie klatki
@@ -370,37 +385,73 @@ void Core::GameRenderEntities()
 
 	// Rysowanie playersprite
 	mainCamera.setCenter(playerClass->getEntityShape()->getPosition());
-	// mainWindow.draw(*(playerClass->GetPlayerShape()));
+	//mainWindow.draw(*(playerClass->getEntityShape()));
 	mainWindow.draw(*(playerClass->getEntitySprite()));
-	// Odœwie¿eni pozycji gracza (sprite)f
+	// Odœwie¿enie pozycji gracza (sprite)
 	playerClass->UpdatePosition();
+	// Odœwie¿anie animacji uderzania
+	playerClass->AnimateFight();
+}
+
+void Core::GameRenderHUD()
+{
+	sf::Vector2f topPos = mainWindow.mapPixelToCoords(sf::Vector2i(0, 0));
+
+	sf::Texture health_bg_t, char_bg_t, health_bar_t;
+	sf::Sprite health_bg, char_bg;
+	sf::RectangleShape health_bar;
+
+	health_bg_t.loadFromFile("resources/UI/health_bg.png");
+	char_bg_t.loadFromFile("resources/UI/char_bg.png");
+	health_bar_t.loadFromFile("resources/UI/health_bar.png");
+
+	health_bg.setTexture(health_bg_t);
+	char_bg.setTexture(char_bg_t);
+	health_bar.setTexture(&health_bar_t);
+
+	float healthBarWidth = Linear::easeNone((float)playerClass->getHealth() / 100.0f, 0.0f, 187.0f, 1.0f);
+
+	health_bar.setSize(sf::Vector2f(healthBarWidth, 12.0f));
 
 
-	sf::Sprite testSprite;
 
+	char_bg.setPosition(sf::Vector2f(topPos.x + 15.0f, topPos.y + 10.0f));
+	health_bg.setPosition(sf::Vector2f(char_bg.getPosition().x + 63.0f, char_bg.getPosition().y + 10.0f));
+	health_bar.setPosition(sf::Vector2f(health_bg.getPosition().x + 15.0f, char_bg.getPosition().y + 20.0f));
+
+
+
+
+
+	mainWindow.draw(health_bg);
+	mainWindow.draw(health_bar);
+	mainWindow.draw(char_bg);
 }
 
 void Core::GameKeyboardEvents()
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+	if (!playerClass->getFightAnim())
 	{
-		playerClass->setDirection(0);
-		playerClass->AnimateMove();
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-	{
-		playerClass->setDirection(1);
-		playerClass->AnimateMove();
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-	{
-		playerClass->setDirection(2);
-		playerClass->AnimateMove();
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-	{
-		playerClass->setDirection(3);
-		playerClass->AnimateMove();
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+		{
+			playerClass->setDirection(0);
+			playerClass->AnimateMove();
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+		{
+			playerClass->setDirection(1);
+			playerClass->AnimateMove();
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+		{
+			playerClass->setDirection(2);
+			playerClass->AnimateMove();
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+		{
+			playerClass->setDirection(3);
+			playerClass->AnimateMove();
+		}
 	}
 }
 
@@ -455,7 +506,7 @@ void Core::EditorMouseEvents()
 			newTile->posY = tilePosition.y;
 			newTile->scale = 4;
 			newTile->breakable = false;
-			newTile->collisions = false;
+			newTile->collisions = editorCollision;
 			newTile->textureId = editorChoosedTexture;
 			newTile->tileSprite = App::GetSpriteFromTexture(newTile->textureId);
 			newTile->tileSprite.setScale((float)newTile->scale, (float)newTile->scale);
@@ -467,6 +518,7 @@ void Core::EditorMouseEvents()
 		{
 			aliveTile->textureId = editorChoosedTexture;
 			aliveTile->tileSprite = App::GetSpriteFromTexture(aliveTile->textureId);
+			aliveTile->collisions = editorCollision;
 			aliveTile->tileSprite.setScale((float)aliveTile->scale, (float)aliveTile->scale);
 			aliveTile->tileSprite.setPosition(sf::Vector2f((float)aliveTile->posX, (float)aliveTile->posY));
 		}
@@ -495,6 +547,19 @@ void Core::EditorMouseEvents()
 	}
 }
 
+void Core::EditorRenderInfo()
+{
+	sf::Vector2f topPos = mainWindow.mapPixelToCoords(sf::Vector2i(0, 0));
+	sf::Text tempText;
+	tempText.setFont(*loadedFonts[0]);
+	char text[500];
+	sprintf_s(text, "Edytor map v1.0\n\nWybrana tekstura: %d\nKolizja: %s", editorChoosedTexture, editorCollision ? "tak" : "nie");
+	tempText.setString(text);
+	tempText.setCharacterSize(20);
+	tempText.setPosition(sf::Vector2f(topPos.x + 5.0f, topPos.y + 5.0f));
+	mainWindow.draw(tempText);
+}
+
 #pragma endregion
 
 #pragma region INTRO
@@ -511,12 +576,12 @@ void Core::FadeHandler()
 
 		if (fadeState) // fade in
 		{
-			float progressingAlpha = (float) Quad::easeIn(progress, 255.0f, -255.0f, 1.0f);
+			float progressingAlpha = (float)Quad::easeIn(progress, 255.0f, -255.0f, 1.0f);
 			fadeRectangle->setFillColor(sf::Color(0, 0, 0, (sf::Uint8)progressingAlpha));
 		}
 		else // fade out
 		{
-			float progressingAlpha = (float) Quad::easeIn(progress, 0.0f, 255.0f, 1.0f);
+			float progressingAlpha = (float)Quad::easeIn(progress, 0.0f, 255.0f, 1.0f);
 			fadeRectangle->setFillColor(sf::Color(0, 0, 0, (sf::Uint8)progressingAlpha));
 		}
 
@@ -525,7 +590,7 @@ void Core::FadeHandler()
 			SetFade(fadeState);
 			isFading = false;
 		}
-			
+
 	}
 }
 
@@ -533,7 +598,7 @@ void Core::RenderFade()
 {
 	sf::Vector2f topPos = mainWindow.mapPixelToCoords(sf::Vector2i(0, 0));
 
-	fadeRectangle->setSize(sf::Vector2f((float) mainWindow.getSize().x, (float) mainWindow.getSize().y));
+	fadeRectangle->setSize(sf::Vector2f((float)mainWindow.getSize().x, (float)mainWindow.getSize().y));
 	fadeRectangle->setPosition(topPos);
 	mainWindow.draw(*fadeRectangle);
 }
@@ -569,6 +634,27 @@ void Core::SetFade(bool toggle)
 	}
 }
 #pragma endregion
+
+void Core::OnKeyPressed(sf::Event * e)
+{
+	if (renderType == RenderType::GAME)
+	{
+		if (e->key.code == sf::Keyboard::Space)
+		{
+			if (!playerClass->getFightAnim())
+			{
+				playerClass->setFightAnim();
+			}
+		}
+	}
+	else if (renderType == RenderType::EDITOR)
+	{
+		if (e->key.code == sf::Keyboard::B)
+		{
+			editorCollision = !editorCollision;
+		}
+	}
+}
 
 sf::Vector2i Core::GetTileFromMouse()
 {

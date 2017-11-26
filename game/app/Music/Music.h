@@ -29,7 +29,7 @@ public:
 	static void Init();
 	static void MusicHandler();
 
-	static void PlayMusic(std::string fileName, bool withFade = true);
+	static void PlayMusic(std::string fileName, int fTime = 2000, bool withFade = true);
 	static void StopMusic();
 };
 

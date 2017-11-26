@@ -75,11 +75,12 @@ void MusicSystem::MusicHandler()
 	}
 }
 
-void MusicSystem::PlayMusic(std::string fileName, bool withFade)
+void MusicSystem::PlayMusic(std::string fileName, int fTime, bool withFade)
 {
 	if (musicState == MusicStates::NONE)
 	{
 		isPlaying = true;
+		fadingTime = fTime;
 		musicState = MusicStates::PLAYING;
 		musicHandler->openFromFile(fileName.c_str());
 
@@ -94,9 +95,14 @@ void MusicSystem::PlayMusic(std::string fileName, bool withFade)
 		musicState = MusicStates::FADINGFIRST;
 		temporaryMusicFilename = fileName;
 		isSecondSoundShouldFade = withFade;
+		fadingTime = fTime;
 	}
 	else
 	{
-		// TODO
+		musicFadingClock->restart();
+		musicState = MusicStates::FADINGFIRST;
+		temporaryMusicFilename = fileName;
+		isSecondSoundShouldFade = withFade;
+		fadingTime = fTime;
 	}
 }

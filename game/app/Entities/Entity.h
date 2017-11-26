@@ -14,6 +14,8 @@ public:
 	int direction;
 	int animationFrame;
 
+	float health;
+
 	// Konstruktor
 	Entity();
 
@@ -31,6 +33,8 @@ public:
 
 	int getDirection() { return direction; }
 	void setDirection(int dir) { direction = dir; }
+
+	float getHealth() { return health; }
 	
 };
 

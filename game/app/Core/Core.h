@@ -31,9 +31,12 @@ private:
 	void FadeOut(int ms);
 	void SetFade(bool toggle);
 
+	void OnKeyPressed(sf::Event * e);
+
 	// Renderowanie gry
 	void GameRenderMap();
 	void GameRenderEntities();
+	void GameRenderHUD();
 	void GameKeyboardEvents();
 
 	// Edytor map
@@ -41,10 +44,12 @@ private:
 	sf::RectangleShape * editorCenterShape;
 	sf::Sprite editorSprite;
 	int editorChoosedTexture;
+	bool editorCollision;
 	bool editorRightButtonPressed;
 
 	void EditorRenderMap();
 	void EditorMouseEvents();
+	void EditorRenderInfo();
 	sf::Vector2i GetTileFromMouse();
 
 	// Intro

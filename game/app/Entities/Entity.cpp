@@ -64,7 +64,7 @@ void Entity::AnimateMove()
 
 void Entity::UpdatePosition()
 {
-	entitySprite.setPosition(sf::Vector2f(entityShape.getPosition().x - 8, entityShape.getPosition().y - 16));
+	entitySprite.setPosition(sf::Vector2f(entityShape.getPosition().x - 16, entityShape.getPosition().y - 32));
 }
 
 void Entity::ChangeAngle()
@@ -91,7 +91,31 @@ void Entity::ChangeAngle()
 
 bool Entity::DoesEntityCollideWithObject()
 {
+	float tempSpeed = moveSpeed;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+	{
+		tempSpeed *= 2;
+	}
+
 	sf::FloatRect entityBounds = entityShape.getGlobalBounds();
+	switch (direction)
+	{
+		case 0:
+			entityBounds.top -= tempSpeed;
+			break;
+
+		case 1:
+			entityBounds.top += tempSpeed;
+			break;
+
+		case 2:
+			entityBounds.left -= tempSpeed;
+			break;
+
+		case 3:
+			entityBounds.left += tempSpeed;
+			break;
+	}
 	for (int i = 0; i < (int)App::loadedMap.size(); i++)
 	{
 		if (App::loadedMap[i]->collisions)
@@ -99,24 +123,20 @@ bool Entity::DoesEntityCollideWithObject()
 			switch (direction)
 			{
 			case 0: // góra
-				entityBounds.top -= moveSpeed;
 				if (entityBounds.intersects(App::loadedMap[i]->tileSprite.getGlobalBounds()))
 					return true;
 				break;
 			case 1: // dó³
-				entityBounds.top += moveSpeed;
 				if (entityBounds.intersects(App::loadedMap[i]->tileSprite.getGlobalBounds()))
 					return true;
 				break;
 
 			case 2: // lewo
-				entityBounds.left -= moveSpeed;
 				if (entityBounds.intersects(App::loadedMap[i]->tileSprite.getGlobalBounds()))
 					return true;
 				break;
 
 			case 3: // prawo
-				entityBounds.left += moveSpeed;
 				if (entityBounds.intersects(App::loadedMap[i]->tileSprite.getGlobalBounds()))
 					return true;
 				break;
