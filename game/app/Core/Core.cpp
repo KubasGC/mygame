@@ -199,6 +199,10 @@ void Core::Loop()
 			{
 				OnKeyPressed(&event);
 			}
+			else if (event.type == sf::Event::KeyReleased)
+			{
+				OnKeyReleased(&event);
+			}
 		}
 
 		// Renderowanie gry
@@ -634,6 +638,18 @@ void Core::SetFade(bool toggle)
 	}
 }
 #pragma endregion
+
+void Core::OnKeyReleased(sf::Event * e)
+{
+	if (renderType == RenderType::GAME)
+	{
+		if (!playerClass->getFightAnim())
+		{
+			if (e->key.code == sf::Keyboard::W || e->key.code == sf::Keyboard::S || e->key.code == sf::Keyboard::A || e->key.code == sf::Keyboard::D)
+				playerClass->ChangeAngle();
+		}
+	}
+}
 
 void Core::OnKeyPressed(sf::Event * e)
 {

@@ -32,6 +32,7 @@ private:
 	void SetFade(bool toggle);
 
 	void OnKeyPressed(sf::Event * e);
+	void OnKeyReleased(sf::Event * e);
 
 	// Renderowanie gry
 	void GameRenderMap();
