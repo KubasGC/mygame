@@ -11,10 +11,24 @@ private:
 	Player * playerClass;
 	int renderType;
 
+	sf::RectangleShape * fadeRectangle;
+	sf::Clock fadeClock;
+	int fadeTime;
+	bool isFading;
+	bool fadeState; // true - fadeIn, false - fadeOut
+
 	std::vector<sf::Font *> loadedFonts;
 
 	void InitGame();
 	void InitEditor();
+
+	// Fading
+	void FadeHandler();
+	void RenderFade();
+
+	void FadeIn(int ms);
+	void FadeOut(int ms);
+	void SetFade(bool toggle);
 
 	// Renderowanie gry
 	void GameRenderMap();

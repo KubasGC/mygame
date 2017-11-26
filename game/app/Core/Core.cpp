@@ -36,6 +36,10 @@ void Core::Init()
 		std::cout << "Zaladowano czcionke " << Files[file].c_str() << ".\n";
 	}
 
+	// Tworzenie fade rectangle
+	fadeRectangle = new RectangleShape();
+	fadeRectangle->setFillColor(sf::Color(0, 0, 0, 0));
+
 
 	// Ustawienie typu renderowanego obiektu
 	renderType = RenderType::INTRO;
@@ -122,12 +126,16 @@ void Core::InitIntro()
 	introClock.restart();
 }
 
+
 // G³ówna pêtla
 void Core::Loop()
 {
 	while (mainWindow.isOpen())
 	{
-		// Events
+		// Fading - œciemnianie ekranu
+		FadeHandler();
+
+		// Eventy
 		sf::Event event;
 		while (mainWindow.pollEvent(event))
 		{
@@ -204,6 +212,9 @@ void Core::Loop()
 
 			// Ustawianie kamery
 			mainWindow.setView(mainCamera);
+
+			// Wyœwietlanie fadingu
+			RenderFade();
 
 			// Wyœwietlenie klatki
 			mainWindow.display();
@@ -322,7 +333,9 @@ void Core::Loop()
 			}
 			else if (introStep == 5)
 			{
+				SetFade(false);
 				renderType = RenderType::GAME;
+				FadeIn(2000);
 				InitGame();
 			}
 			// Wyœwietlenie klatki
@@ -475,6 +488,71 @@ void Core::EditorMouseEvents()
 
 #pragma region INTRO
 
+#pragma endregion
+
+#pragma region FADE
+void Core::FadeHandler()
+{
+	if (isFading)
+	{
+		sf::Time elapsedTime = fadeClock.getElapsedTime();
+		float progress = (float)(elapsedTime.asMilliseconds() / (float)fadeTime);
+
+		if (fadeState) // fade in
+		{
+			float progressingAlpha = (float) Quad::easeIn(progress, 255.0f, -255.0f, 1.0f);
+			fadeRectangle->setFillColor(sf::Color(0, 0, 0, (sf::Uint8)progressingAlpha));
+		}
+		else // fade out
+		{
+			float progressingAlpha = (float) Quad::easeIn(progress, 0.0f, 255.0f, 1.0f);
+			fadeRectangle->setFillColor(sf::Color(0, 0, 0, (sf::Uint8)progressingAlpha));
+		}
+
+		if (progress >= 1)
+			isFading = false;
+	}
+}
+
+void Core::RenderFade()
+{
+	sf::Vector2f topPos = mainWindow.mapPixelToCoords(sf::Vector2i(0, 0));
+
+	fadeRectangle->setSize(sf::Vector2f((float) mainWindow.getSize().x, (float) mainWindow.getSize().y));
+	fadeRectangle->setPosition(topPos);
+	mainWindow.draw(*fadeRectangle);
+}
+
+void Core::FadeIn(int ms)
+{
+	fadeState = true;
+	fadeTime = ms;
+
+	fadeClock.restart();
+	isFading = true;
+}
+
+void Core::FadeOut(int ms)
+{
+	fadeState = false;
+	fadeTime = ms;
+
+	fadeClock.restart();
+	isFading = true;
+}
+
+void Core::SetFade(bool toggle)
+{
+	isFading = false;
+	if (toggle)
+	{
+		fadeRectangle->setFillColor(sf::Color(0, 0, 0, 0));
+	}
+	else
+	{
+		fadeRectangle->setFillColor(sf::Color(0, 0, 0, 255));
+	}
+}
 #pragma endregion
 
 sf::Vector2i Core::GetTileFromMouse()
