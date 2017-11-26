@@ -2,6 +2,7 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 #include "../Entities/Player.h"
+#include "../Music/Music.h"
 class Core
 {
 private:

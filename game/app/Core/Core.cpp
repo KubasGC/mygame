@@ -22,6 +22,8 @@ void Core::Init()
 	mainWindow.setFramerateLimit(60);
 	mainWindow.setVerticalSyncEnabled(true);
 
+	// £adowanie systemu dŸwiêku
+	MusicSystem::Init();
 
 	// £adowanie czcionek
 	std::string Files[1] =
@@ -122,6 +124,9 @@ void Core::InitEditor()
 
 void Core::InitIntro()
 {
+	// W³¹czenie muzyki
+	MusicSystem::PlayMusic("resources/sounds/prologue.ogg");
+
 	introStep = 1;
 	introClock.restart();
 }
@@ -134,6 +139,9 @@ void Core::Loop()
 	{
 		// Fading - œciemnianie ekranu
 		FadeHandler();
+
+		// G³ówna pêtla dla systemu audio
+		MusicSystem::MusicHandler();
 
 		// Eventy
 		sf::Event event;
@@ -244,10 +252,12 @@ void Core::Loop()
 			mainWindow.clear(sf::Color::Black);
 			if (introStep == 1)
 			{
+
 				sf::Time elapsedTime = introClock.getElapsedTime();
 				float progress = (float)(elapsedTime.asMilliseconds() / 500);
 				if (progress > 1)
 				{
+
 					introStep = 2;
 					introClock.restart();
 				}
@@ -336,6 +346,7 @@ void Core::Loop()
 				SetFade(false);
 				renderType = RenderType::GAME;
 				FadeIn(2000);
+				MusicSystem::PlayMusic("resources/sounds/no-more-magic.ogg", false);
 				InitGame();
 			}
 			// Wyœwietlenie klatki
@@ -510,7 +521,11 @@ void Core::FadeHandler()
 		}
 
 		if (progress >= 1)
+		{
+			SetFade(fadeState);
 			isFading = false;
+		}
+			
 	}
 }
 

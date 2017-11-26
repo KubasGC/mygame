@@ -63,6 +63,9 @@
     <ClCompile Include="app\Entities\Entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="app\Music\Music.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app\Core\Core.h">
@@ -116,6 +119,9 @@
     <ClInclude Include="app\Entities\Entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="app\Music\Music.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Font Include="resources\fonts\BarlowSemiCondensed-Light.ttf" />
@@ -136,5 +142,9 @@
     <Image Include="resources\sprites\playersprite.png">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\sounds\prologue.ogg" />
+    <None Include="resources\sounds\no-more-magic.ogg" />
   </ItemGroup>
 </Project>
