@@ -21,7 +21,7 @@ void Core::Init()
 	// Tworzenie okna
 	mainWindow.create(sf::VideoMode(1366, 768), "Game by Kubas", !sf::Style::Resize | sf::Style::Close | sf::Style::Titlebar);
 	mainWindow.setFramerateLimit(60);
-	mainWindow.setVerticalSyncEnabled(true);
+	mainWindow.setVerticalSyncEnabled(false);
 
 	// £adowanie systemu dŸwiêku
 	MusicSystem::Init();
@@ -45,7 +45,7 @@ void Core::Init()
 
 
 	// Ustawienie typu renderowanego obiektu
-	renderType = RenderType::INTRO;
+	renderType = RenderType::GAME;
 
 	// Wprowadzenie danych ustawieñ
 
@@ -86,6 +86,9 @@ void Core::InitGame()
 
 	// Ustawianie kamery
 	mainCamera.setSize(sf::Vector2f((float)mainWindow.getSize().x, (float)mainWindow.getSize().y));
+
+	Enemy * tempEnemy = new Enemy(sf::Vector2f(20.0f, 20.0f));
+	allEnemies.push_back(tempEnemy);
 }
 
 void Core::InitEditor()
@@ -386,6 +389,13 @@ void Core::GameRenderMap()
 
 void Core::GameRenderEntities()
 {
+
+	// Rendering wrogów
+	for (int i = 0; i < (int)allEnemies.size(); i++)
+	{
+		allEnemies[i]->DoJob();
+		mainWindow.draw(*(allEnemies[i]->getEntitySprite()));
+	}
 
 	// Rysowanie playersprite
 	mainCamera.setCenter(playerClass->getEntityShape()->getPosition());

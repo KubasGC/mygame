@@ -2,6 +2,7 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 #include "../Entities/Player.h"
+#include "../Entities/Enemy.h"
 #include "../Music/Music.h"
 class Core
 {
@@ -9,7 +10,6 @@ private:
 	sf::RenderWindow mainWindow;
 	sf::View mainCamera;
 	sf::Font mainFont;
-	Player * playerClass;
 	int renderType;
 
 	sf::RectangleShape * fadeRectangle;
@@ -35,6 +35,9 @@ private:
 	void OnKeyReleased(sf::Event * e);
 
 	// Renderowanie gry
+	Player * playerClass;
+	std::vector <Enemy *> allEnemies;
+
 	void GameRenderMap();
 	void GameRenderEntities();
 	void GameRenderHUD();

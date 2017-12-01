@@ -160,6 +160,7 @@
     <ClCompile Include="app\Entities\Player.cpp" />
     <ClCompile Include="app\Entities\Entity.cpp" />
     <ClCompile Include="app\Music\Music.cpp" />
+    <ClCompile Include="app\Entities\Enemy.cpp" />
     <ClCompile Include="game.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -181,6 +182,7 @@
     <ClInclude Include="app\Entities\Player.h" />
     <ClInclude Include="app\Tiles\Tile.h" />
     <ClInclude Include="app\Entities\Entity.h" />
+    <ClInclude Include="app\Entities\Enemy.h" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="resources\fonts\BarlowSemiCondensed-Light.ttf" />
