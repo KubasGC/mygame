@@ -30,7 +30,7 @@ public:
 	static void MusicHandler();
 
 	static void PlayMusic(std::string fileName, int fTime = 2000, bool withFade = true);
-	static void StopMusic();
+	static void StopMusic(); // TODO
 };
 
 #endif // _MUSIC_H_

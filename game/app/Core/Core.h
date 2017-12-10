@@ -36,7 +36,6 @@ private:
 
 	// Renderowanie gry
 	Player * playerClass;
-	std::vector <Enemy *> allEnemies;
 
 	void GameRenderMap();
 	void GameRenderEntities();

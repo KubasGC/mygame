@@ -116,31 +116,17 @@ bool Entity::DoesEntityCollideWithObject()
 			entityBounds.left += tempSpeed;
 			break;
 	}
-	for (int i = 0; i < (int)App::loadedMap.size(); i++)
+	for (int i = 0; i < (int)App::loadedEnemies.size(); i++)
+	{
+		if (entityBounds.intersects(App::loadedEnemies[i]->entityShape.getGlobalBounds()))
+			return true;
+	}
+	for (int i = 0; i < (int) App::loadedMap.size(); i++)
 	{
 		if (App::loadedMap[i]->collisions)
 		{
-			switch (direction)
-			{
-			case 0: // góra
-				if (entityBounds.intersects(App::loadedMap[i]->tileSprite.getGlobalBounds()))
-					return true;
-				break;
-			case 1: // dó³
-				if (entityBounds.intersects(App::loadedMap[i]->tileSprite.getGlobalBounds()))
-					return true;
-				break;
-
-			case 2: // lewo
-				if (entityBounds.intersects(App::loadedMap[i]->tileSprite.getGlobalBounds()))
-					return true;
-				break;
-
-			case 3: // prawo
-				if (entityBounds.intersects(App::loadedMap[i]->tileSprite.getGlobalBounds()))
-					return true;
-				break;
-			}
+			if (entityBounds.intersects(App::loadedMap[i]->tileSprite.getGlobalBounds()))
+				return true;
 		}
 	}
 	return false;

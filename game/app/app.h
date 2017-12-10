@@ -7,6 +7,7 @@
 class App
 {
 public:
+	static std::vector<Enemy *> loadedEnemies;
 	static std::vector<Textures::Texture *> loadedTextures;
 	static std::vector<Tile *> loadedMap;
 

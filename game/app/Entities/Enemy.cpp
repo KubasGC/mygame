@@ -9,10 +9,16 @@ Enemy::Enemy(sf::Vector2f startPosition)
 	entityShape.setSize(sf::Vector2f(32, 32));
 	entityShape.setFillColor(sf::Color::Blue);
 
-	direction = 0;
+	entityShape.setPosition(startPosition);
+	entitySprite.setPosition(sf::Vector2f(entityShape.getPosition().x - 16, entityShape.getPosition().y - 32));
+
+
+	direction = 1;
 	animationFrame = 0;
 	moveSpeed = 1.5f;
 	health = 100.0f;
+
+	ChangeAngle();
 
 	std::cout << "Enemy class has loaded\n";
 }

@@ -6,6 +6,7 @@
 
 std::vector<Textures::Texture *> App::loadedTextures;
 std::vector<Tile *> App::loadedMap;
+std::vector<Enemy *> App::loadedEnemies;
 
 /*void App::LoadTextures()
 {

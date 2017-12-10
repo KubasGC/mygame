@@ -87,8 +87,8 @@ void Core::InitGame()
 	// Ustawianie kamery
 	mainCamera.setSize(sf::Vector2f((float)mainWindow.getSize().x, (float)mainWindow.getSize().y));
 
-	Enemy * tempEnemy = new Enemy(sf::Vector2f(20.0f, 20.0f));
-	allEnemies.push_back(tempEnemy);
+	Enemy * tempEnemy = new Enemy(sf::Vector2f(100.0f, 50.0f));
+	App::loadedEnemies.push_back(tempEnemy);
 }
 
 void Core::InitEditor()
@@ -391,10 +391,10 @@ void Core::GameRenderEntities()
 {
 
 	// Rendering wrogów
-	for (int i = 0; i < (int)allEnemies.size(); i++)
+	for (int i = 0; i < (int)App::loadedEnemies.size(); i++)
 	{
-		allEnemies[i]->DoJob();
-		mainWindow.draw(*(allEnemies[i]->getEntitySprite()));
+		App::loadedEnemies[i]->DoJob();
+		mainWindow.draw(*(App::loadedEnemies[i]->getEntitySprite()));
 	}
 
 	// Rysowanie playersprite
