@@ -15,6 +15,7 @@ public:
 	static sf::Sprite GetSpriteFromTexture(int textureId);
 
 	static void LoadMapFromFile(std::string fileName);
+	static void LoadPathfinderFromMap();
 
 	static Tile * GetTextureFromPosition(int left, int top);
 };

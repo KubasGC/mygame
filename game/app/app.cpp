@@ -4,29 +4,28 @@
 
 #include <rapidxml/rapidxml_utils.hpp>
 
+#include "PathFinder/PathFinder.h"
+#include "PathFinder/AStar.h"
+
 std::vector<Textures::Texture *> App::loadedTextures;
 std::vector<Tile *> App::loadedMap;
 std::vector<Enemy *> App::loadedEnemies;
 
-/*void App::LoadTextures()
+class MapTile : public AStarNode
 {
-	const char *  tileName = "resources/tiles/forest_tiles.png";
-	Textures::Texture* tempTexture = new Textures::Texture();
-	tempTexture->textureId = 0;
-	if (tempTexture->sfmlTexture.loadFromFile(tileName, sf::IntRect(0, 0, 64, 64)))
+private:
+	bool m_Walkable;
+public:
+	MapTile()
 	{
-		loadedTextures.push_back(tempTexture);
-		std::cout << "Added texture no. 1" << std::endl;
-	}
-	else
-	{
-		std::cout << "Texture no. 1 isn't loaded." << std::endl;
-		system("pause");
-		exit(1);
+
 	}
 
+	~MapTile()
+	{
 
-}*/
+	}
+};
 
 void App::LoadTextures()
 {
@@ -95,12 +94,10 @@ void App::LoadTextures()
 	}
 
 }
-
 sf::Sprite App::GetSpriteFromTexture(int textureId)
 {
 	return sf::Sprite(loadedTextures[textureId]->sfmlTexture);
 }
-
 void App::LoadMapFromFile(std::string fileName)
 {
 
@@ -163,7 +160,10 @@ void App::LoadMapFromFile(std::string fileName)
 		child = child->next_sibling();
 	}
 }
+void App::LoadPathfinderFromMap()
+{
 
+}
 Tile * App::GetTextureFromPosition(int left, int top)
 {
 	for (int i = 0; i < (int)loadedMap.size(); i++)
