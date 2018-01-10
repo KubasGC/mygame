@@ -15,16 +15,23 @@ class MapTile : public AStarNode
 {
 private:
 	bool m_Walkable;
-public:
-	MapTile()
-	{
 
+	float m_x;
+	float m_y;
+public:
+	MapTile(float x, float y, bool walkable)
+	{
+		m_Walkable = walkable;
+		m_x = x;
+		m_y = y;
 	}
 
 	~MapTile()
 	{
 
 	}
+
+
 };
 
 void App::LoadTextures()
@@ -163,6 +170,20 @@ void App::LoadMapFromFile(std::string fileName)
 void App::LoadPathfinderFromMap()
 {
 
+}
+Tile * App::GetTileFromPosition(int x, int y)
+{
+	for (int i = 0; i < loadedMap.size(); i++)
+	{
+		if (loadedMap[i]->posX < x && loadedMap[i]->posX + (loadedMap[i]->scale * 16) > x)
+		{
+			if (loadedMap[i]->posY < y && loadedMap[i]->posY + (loadedMap[i]->scale * 16) > y)
+			{
+				return loadedMap[i];
+			}
+		}
+	}
+	return nullptr;
 }
 Tile * App::GetTextureFromPosition(int left, int top)
 {

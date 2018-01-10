@@ -16,6 +16,7 @@ public:
 
 	static void LoadMapFromFile(std::string fileName);
 	static void LoadPathfinderFromMap();
+	static Tile * GetTileFromPosition(int x, int y);
 
 	static Tile * GetTextureFromPosition(int left, int top);
 };
