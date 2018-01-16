@@ -47,6 +47,8 @@ void Core::Init()
 
 	playerClass = new Player();
 	renderType = RenderType::GAME;
+
+	mainCamera.setSize(sf::Vector2f((float)mainWindow.getSize().x, (float)mainWindow.getSize().y));
 }
 
 void Core::Loop()
@@ -69,7 +71,16 @@ void Core::Loop()
 		else if (renderType == RenderType::GAME)
 		{
 			mainWindow.clear(sf::Color::Black);
-			GameRenderMap();
+			RenderMap();
+
+
+			
+
+			mainWindow.draw(*(playerClass->getEntityShape()));
+			mainWindow.draw(*(playerClass->getEntitySprite()));
+			playerClass->Move(mainWindow);
+			mainCamera.setCenter(playerClass->getEntityShape()->getPosition());
+			mainWindow.setView(mainCamera);
 			mainWindow.display();
 		}
 	}
@@ -142,7 +153,7 @@ void Core::SetFade(bool toggle)
 	}
 }
 
-void Core::GameRenderMap()
+void Core::RenderMap()
 {
 	for (int i = 0; i < (int)App::loadedMap.size(); i++)
 	{

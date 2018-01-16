@@ -37,7 +37,7 @@ private:
 	// Renderowanie gry
 	Player * playerClass;
 
-	void GameRenderMap();
+	void RenderMap();
 	void GameRenderEntities();
 	void GameRenderHUD();
 	void GameKeyboardEvents();

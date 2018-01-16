@@ -197,6 +197,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\Desktop\new game\img\Tilesheet\tilesheet_complete.png" />
+    <Image Include="resources\sprites\characters.png" />
     <Image Include="resources\sprites\playersprite.png" />
     <Image Include="resources\tiles\Floor.png" />
     <Image Include="resources\tiles\forest_tiles.png" />

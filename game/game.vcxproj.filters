@@ -168,6 +168,9 @@
     <Image Include="resources\tiles\Tilesheet.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="resources\sprites\characters.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\sounds\prologue.ogg" />

@@ -13,6 +13,8 @@ public:
 
 	void AnimateFight();
 
+	void Move(sf::RenderWindow & mainWindow);
+
 	bool getFightAnim() const;
 	void setFightAnim();
 };

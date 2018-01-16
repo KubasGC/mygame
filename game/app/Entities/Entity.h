@@ -17,6 +17,7 @@ public:
 	int animationFrame;
 
 	float health;
+	float heading;
 
 	// Konstruktor
 	Entity();
