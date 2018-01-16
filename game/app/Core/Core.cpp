@@ -18,6 +18,129 @@ Core::Core()
 
 void Core::Init()
 {
+	// Tworzenie okna gry
+	mainWindow.create(sf::VideoMode(1366, 768), "Nazwa gry", !sf::Style::Resize | sf::Style::Close || sf::Style::Titlebar);
+	mainWindow.setFramerateLimit(60);
+	mainWindow.setVerticalSyncEnabled(false);
+
+	// system dŸwiêku todo
+
+	// £adowanie czcionek
+	std::string Files[1] =
+	{
+		std::string("resources/fonts/Roboto-Light.ttf") // 0
+	};
+	for (int file = 0; file < 1; file++)
+	{
+		sf::Font * tempFont = new sf::Font();
+		tempFont->loadFromFile(Files[file].c_str());
+		loadedFonts.push_back(tempFont);
+		std::cout << "Zaladowano czcionke " << Files[file].c_str() << ".\n";
+	}
+
+	// Tworzenie fade rectangle
+	fadeRectangle = new RectangleShape();
+	fadeRectangle->setFillColor(sf::Color(0, 0, 0, 0));
+
+	renderType = RenderType::MENU;
+}
+
+void Core::Loop()
+{
+	while (mainWindow.isOpen())
+	{
+		sf::Event windowEvent;
+
+		FadeHandler(); // Handler do œciemniania ekranu
+		// todo pêtla do systemu audio
+		while (mainWindow.pollEvent(windowEvent))
+		{
+			// todo eventy
+		}
+		mainWindow.clear();
+		if (renderType == RenderType::MENU)
+		{
+
+		}
+	}
+}
+
+void Core::FadeHandler()
+{
+	if (isFading)
+	{
+		sf::Time elapsedTime = fadeClock.getElapsedTime();
+		float progress = (float)(elapsedTime.asMilliseconds() / (float)fadeTime);
+
+		if (fadeState) // fade in
+		{
+			float progressingAlpha = (float)Quad::easeIn(progress, 255.0f, -255.0f, 1.0f);
+			fadeRectangle->setFillColor(sf::Color(0, 0, 0, (sf::Uint8)progressingAlpha));
+		}
+		else // fade out
+		{
+			float progressingAlpha = (float)Quad::easeIn(progress, 0.0f, 255.0f, 1.0f);
+			fadeRectangle->setFillColor(sf::Color(0, 0, 0, (sf::Uint8)progressingAlpha));
+		}
+
+		if (progress >= 1)
+		{
+			SetFade(fadeState);
+			isFading = false;
+		}
+
+	}
+}
+
+void Core::RenderFade()
+{
+	sf::Vector2f topPos = mainWindow.mapPixelToCoords(sf::Vector2i(0, 0));
+
+	fadeRectangle->setSize(sf::Vector2f((float)mainWindow.getSize().x, (float)mainWindow.getSize().y));
+	fadeRectangle->setPosition(topPos);
+	mainWindow.draw(*fadeRectangle);
+}
+
+void Core::FadeIn(int ms)
+{
+	fadeState = true;
+	fadeTime = ms;
+
+	fadeClock.restart();
+	isFading = true;
+}
+
+void Core::FadeOut(int ms)
+{
+	fadeState = false;
+	fadeTime = ms;
+
+	fadeClock.restart();
+	isFading = true;
+}
+
+void Core::SetFade(bool toggle)
+{
+	isFading = false;
+	if (toggle)
+	{
+		fadeRectangle->setFillColor(sf::Color(0, 0, 0, 0));
+	}
+	else
+	{
+		fadeRectangle->setFillColor(sf::Color(0, 0, 0, 255));
+	}
+}
+
+/*
+
+Core::Core()
+{
+
+}
+
+void Core::Init()
+{
 	// Tworzenie okna
 	mainWindow.create(sf::VideoMode(1366, 768), "Game by Kubas", !sf::Style::Resize | sf::Style::Close | sf::Style::Titlebar);
 	mainWindow.setFramerateLimit(60);
@@ -225,7 +348,7 @@ void Core::Loop()
 			tempText.setString(text);
 			tempText.setCharacterSize(20);
 			tempText.setPosition(sf::Vector2f(playerClass->getEntityShape()->getPosition().x - mainWindow.getSize().x / 2, playerClass->getEntityShape()->getPosition().y - mainWindow.getSize().y / 2));
-			mainWindow.draw(tempText);*/
+			mainWindow.draw(tempText);
 
 			// Eventy klawiatury
 			GameKeyboardEvents();
@@ -692,3 +815,5 @@ sf::Vector2i Core::GetTileFromMouse()
 
 	return sf::Vector2i(searchedX, searchedY);
 }
+
+*/
