@@ -10,6 +10,8 @@ public:
 	sf::Sprite entitySprite;
 	sf::RectangleShape entityShape;
 
+	int MoveType;
+
 	float moveSpeed;
 	int direction;
 	int animationFrame;

@@ -38,7 +38,8 @@ void App::LoadTextures()
 {
 	std::string Files[1] =
 	{
-		std::string("Floor")
+		// std::string("Floor"),
+		std::string("Tilesheet")
 	};
 
 	int id = 0;

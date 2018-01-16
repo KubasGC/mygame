@@ -137,6 +137,8 @@
   <ItemGroup>
     <Xml Include="resources\maps\defaultMap.xml" />
     <Xml Include="resources\tiles\Floor.xml" />
+    <Xml Include="resources\tiles\Tilesheet.xml" />
+    <Xml Include="resources\maps\newMap.xml" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\tiles\forest_tiles.png">
@@ -158,6 +160,12 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="resources\UI\health_bar.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\..\Desktop\new game\img\Tilesheet\tilesheet_complete.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\tiles\Tilesheet.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

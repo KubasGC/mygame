@@ -42,7 +42,11 @@ void Core::Init()
 	fadeRectangle = new RectangleShape();
 	fadeRectangle->setFillColor(sf::Color(0, 0, 0, 0));
 
-	renderType = RenderType::MENU;
+	App::LoadTextures();
+	App::LoadMapFromFile("resources/maps/newMap.xml");
+
+	playerClass = new Player();
+	renderType = RenderType::GAME;
 }
 
 void Core::Loop()
@@ -57,10 +61,16 @@ void Core::Loop()
 		{
 			// todo eventy
 		}
-		mainWindow.clear();
+		
 		if (renderType == RenderType::MENU)
 		{
 
+		}
+		else if (renderType == RenderType::GAME)
+		{
+			mainWindow.clear(sf::Color::Black);
+			GameRenderMap();
+			mainWindow.display();
 		}
 	}
 }
@@ -129,6 +139,14 @@ void Core::SetFade(bool toggle)
 	else
 	{
 		fadeRectangle->setFillColor(sf::Color(0, 0, 0, 255));
+	}
+}
+
+void Core::GameRenderMap()
+{
+	for (int i = 0; i < (int)App::loadedMap.size(); i++)
+	{
+		mainWindow.draw(App::loadedMap[i]->tileSprite);
 	}
 }
 
