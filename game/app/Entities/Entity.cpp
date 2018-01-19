@@ -64,7 +64,7 @@ void Entity::AnimateMove()
 
 void Entity::UpdatePosition()
 {
-	entitySprite.setPosition(sf::Vector2f(entityShape.getPosition().x - 16, entityShape.getPosition().y - 32));
+	entitySprite.setPosition(sf::Vector2f(entityShape.getPosition().x + 18, entityShape.getPosition().y + 21));
 }
 
 void Entity::ChangeAngle()
@@ -128,6 +128,49 @@ bool Entity::DoesEntityCollideWithObject()
 			if (entityBounds.intersects(App::loadedMap[i]->tileSprite.getGlobalBounds()))
 				return true;
 		}
+	}
+	return false;
+}
+
+bool Entity::GetEntityMovePositionAfterCollide(float startPosX, float startPosY, float * posX, float * posY)
+{
+	bool xChanged = false;
+	bool yChanged = false;
+
+
+	for (int i = 0; i < (int)App::loadedMap.size(); i++)
+	{
+		if (App::loadedMap[i]->collisions)
+		{
+			// Sprawdzanie x
+			if (!xChanged)
+			{
+				sf::FloatRect entityBounds = entityShape.getGlobalBounds();
+				entityBounds.left = startPosX + *(posX);
+				if (entityBounds.intersects(App::loadedMap[i]->tileSprite.getGlobalBounds()))
+				{
+					// std::cout << "X ZMIENIONE" << std::endl;;
+					xChanged = true;
+					*(posX) = 0.0f;
+				}
+			}
+			// sprawdzanie y
+			if (!yChanged)
+			{
+				sf::FloatRect entityBounds = entityShape.getGlobalBounds();
+				entityBounds.top = startPosY + *(posY);
+				if (entityBounds.intersects(App::loadedMap[i]->tileSprite.getGlobalBounds()))
+				{
+					// std::cout << "Y ZMIENIONE" << std::endl;;
+					yChanged = true;
+					*(posY) = 0.0f;
+				}
+			}
+		}
+	}
+	if (xChanged || yChanged)
+	{
+		return true;
 	}
 	return false;
 }

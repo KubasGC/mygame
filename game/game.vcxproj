@@ -159,6 +159,7 @@
     <ClCompile Include="app\Easing\Sine.cpp" />
     <ClCompile Include="app\Entities\Player.cpp" />
     <ClCompile Include="app\Entities\Entity.cpp" />
+    <ClCompile Include="app\Entities\Projectile.cpp" />
     <ClCompile Include="app\Music\Music.cpp" />
     <ClCompile Include="app\Entities\Enemy.cpp" />
     <ClCompile Include="game.cpp" />
@@ -208,6 +209,7 @@
     <Image Include="resources\UI\mana_bg.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app\Entities\Projectile.h" />
     <None Include="resources\sounds\no-more-magic.ogg" />
     <None Include="resources\sounds\prologue.ogg" />
   </ItemGroup>

@@ -18,7 +18,7 @@
   <tile id="1" breakable="false" x="1024" y="64" scale="1" collisions="false" />
   <tile id="1" breakable="false" x="1152" y="64" scale="1" collisions="false" />
   <tile id="1" breakable="false" x="1280" y="64" scale="1" collisions="false" />
-  <tile id="1" breakable="false" x="1408" y="64" scale="1" collisions="false" />
+  <tile id="1" breakable="false" x="1500" y="64" scale="1" collisions="true" />
 
   <tile id="0" breakable="false" x="0" y="128" scale="1" collisions="false" />
   <tile id="0" breakable="false" x="256" y="128" scale="1" collisions="false" />

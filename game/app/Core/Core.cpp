@@ -73,14 +73,24 @@ void Core::Loop()
 			mainWindow.clear(sf::Color::Black);
 			RenderMap();
 
-
-			
-
 			mainWindow.draw(*(playerClass->getEntityShape()));
 			mainWindow.draw(*(playerClass->getEntitySprite()));
 			playerClass->Move(mainWindow);
+			playerClass->UpdatePosition();
 			mainCamera.setCenter(playerClass->getEntityShape()->getPosition());
 			mainWindow.setView(mainCamera);
+
+			/*sf::Text tempText;
+			tempText.setFont(*loadedFonts[0]);
+			char text[200];
+			sprintf_s(text, "Pozycja gracza:\nX: %0.2f\nY: %0.2f", playerClass->getEntityShape()->getPosition().x, playerClass->getEntityShape()->getPosition().y);
+			tempText.setString(text);
+			tempText.setCharacterSize(20);
+			tempText.setPosition(playerClass->getEntityShape()->getPosition());
+			mainWindow.draw(tempText);
+			*/
+
+
 			mainWindow.display();
 		}
 	}

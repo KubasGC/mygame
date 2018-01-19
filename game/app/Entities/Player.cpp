@@ -7,9 +7,9 @@ Player::Player()
 {
 	entityTexture.loadFromFile("resources/sprites/characters.png");
 	entitySprite.setTexture(entityTexture);
-	entitySprite.setTextureRect(sf::IntRect(390, 176, 35, 43));
-	entitySprite.setOrigin(sf::Vector2f(35 / 2, 43 / 2));
-	entityShape.setSize(sf::Vector2f(40, 40));
+	entitySprite.setTextureRect(sf::IntRect(0, 88, 56, 43));
+	entitySprite.setOrigin(sf::Vector2f(15, 43 / 2));
+	entityShape.setSize(sf::Vector2f(50, 40));
 	entityShape.setFillColor(sf::Color::Blue);
 
 	direction = 0;
@@ -21,6 +21,11 @@ Player::Player()
 	MoveType = 1;
 
 	std::cout << "Player class has loaded\n";
+}
+
+void Player::UpdatePosition()
+{
+	entitySprite.setPosition(sf::Vector2f(entityShape.getPosition().x + 28, entityShape.getPosition().y + 21));
 }
 
 void Player::AnimateFight()
@@ -63,11 +68,13 @@ void Player::Move(sf::RenderWindow & mainWindow)
 	sf::Vector2f localPosition = mainWindow.mapPixelToCoords(pixelPos);
 
 	float tempAngleInRadians = -atan2(localPosition.x - entityShape.getPosition().x, localPosition.y - entityShape.getPosition().y);
-	float tempAngle = tempAngleInRadians * (180.0 / 3.141592653589793238463);
+	float tempAngle = tempAngleInRadians * (180.0 / 3.14);
 	if (tempAngle < 0)
 	{
 		tempAngle += 360;
 	}
+
+	sf::FloatRect entityBounds = entityShape.getGlobalBounds();
 
 	float xPos = 0;
 	float yPos = 0;
@@ -99,8 +106,14 @@ void Player::Move(sf::RenderWindow & mainWindow)
 		}
 	}
 
-	entityShape.move(sf::Vector2f(xPos, yPos));
-	entitySprite.setPosition(entityShape.getPosition());
+	if (xPos != 0 || yPos != 0)
+	{
+		GetEntityMovePositionAfterCollide(entityBounds.left, entityBounds.top, &xPos, &yPos);
+	}
+
+	entityShape.setPosition(sf::Vector2f(entityBounds.left + xPos, entityBounds.top + yPos));
+	
+	// entitySprite.setPosition(entityShape.getPosition());
 	heading = tempAngle + 90.0f;
 	if (heading > 360.0f)
 	{
@@ -111,7 +124,7 @@ void Player::Move(sf::RenderWindow & mainWindow)
 		heading += 360.0f;
 	}
 	entitySprite.setRotation(heading);
-	entityShape.setRotation(heading);
+	// entityShape.setRotation(heading);
 }
 
 bool Player::getFightAnim() const

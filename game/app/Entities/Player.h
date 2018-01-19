@@ -11,6 +11,7 @@ private:
 public:
 	Player();
 
+	void UpdatePosition();
 	void AnimateFight();
 
 	void Move(sf::RenderWindow & mainWindow);

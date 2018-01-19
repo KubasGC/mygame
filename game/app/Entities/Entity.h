@@ -24,9 +24,11 @@ public:
 
 	// Metody
 	void AnimateMove();
-	void UpdatePosition();
+	virtual void UpdatePosition();
 	void ChangeAngle();
 	bool DoesEntityCollideWithObject();
+
+	bool GetEntityMovePositionAfterCollide(float startPosX, float startPosY, float * posX, float * posY);
 
 	// Gettery i settery
 	Sprite * getEntitySprite() { return &entitySprite; }

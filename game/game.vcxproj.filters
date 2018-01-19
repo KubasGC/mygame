@@ -69,6 +69,9 @@
     <ClCompile Include="app\Entities\Enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="app\Entities\Projectile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app\Core\Core.h">
@@ -175,5 +178,6 @@
   <ItemGroup>
     <None Include="resources\sounds\prologue.ogg" />
     <None Include="resources\sounds\no-more-magic.ogg" />
+    <None Include="app\Entities\Projectile.h" />
   </ItemGroup>
 </Project>
