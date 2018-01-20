@@ -19,7 +19,7 @@ Core::Core()
 void Core::Init()
 {
 	// Tworzenie okna gry
-	mainWindow.create(sf::VideoMode(1366, 768), "Nazwa gry", !sf::Style::Resize | sf::Style::Close || sf::Style::Titlebar);
+	mainWindow.create(sf::VideoMode(1366, 768), "Zombies attack", !sf::Style::Resize || sf::Style::Titlebar);
 	mainWindow.setFramerateLimit(60);
 	mainWindow.setVerticalSyncEnabled(false);
 
@@ -48,6 +48,11 @@ void Core::Init()
 	playerClass = new Player();
 	renderType = RenderType::GAME;
 
+	App::loadedEnemies.push_back(new Enemy(sf::Vector2f(150, 50)));
+	App::loadedEnemies.push_back(new Enemy(sf::Vector2f(200, 20)));
+	App::loadedEnemies.push_back(new Enemy(sf::Vector2f(250, 80)));
+	App::loadedEnemies.push_back(new Enemy(sf::Vector2f(300, 100)));
+
 	mainCamera.setSize(sf::Vector2f((float)mainWindow.getSize().x, (float)mainWindow.getSize().y));
 }
 
@@ -73,7 +78,25 @@ void Core::Loop()
 			mainWindow.clear(sf::Color::Black);
 			RenderMap();
 
-			mainWindow.draw(*(playerClass->getEntityShape()));
+			for (int i = 0; i < (int)App::loadedBullets.size(); i++)
+			{
+				if (App::loadedBullets[i]->doesProjectileShouldBeRemoved(App::loadedMap))
+				{
+					App::DestroyBullet(App::loadedBullets[i]);
+				}
+				else
+				{
+					App::loadedBullets[i]->Draw(&mainWindow);
+				}
+			}
+
+			for (int i = 0; i < (int)App::loadedEnemies.size(); i++)
+			{
+				App::loadedEnemies[i]->Move(playerClass);
+				App::loadedEnemies[i]->Draw(&mainWindow);
+			}
+
+			// mainWindow.draw(*(playerClass->getEntityShape()));
 			mainWindow.draw(*(playerClass->getEntitySprite()));
 			playerClass->Move(mainWindow);
 			playerClass->UpdatePosition();

@@ -1,14 +1,14 @@
 #pragma once
-#ifndef  _ENEMY_H_
-#define _ENEMY_H_
-
 #include "Entity.h"
+#include "Player.h"
 class Enemy : public Entity
 {
 public:
 	Enemy(sf::Vector2f startPosition);
 
-	void DoJob();
-};
+	void Move(Player * playerClass);
+	void Draw(sf::RenderWindow * window);
+	void UpdatePosition();
 
-#endif // ! _ENEMY_H_
+	sf::Vector2f position;
+};

@@ -12,8 +12,6 @@ Player::Player()
 	entityShape.setSize(sf::Vector2f(50, 40));
 	entityShape.setFillColor(sf::Color::Blue);
 
-	direction = 0;
-	animationFrame = 0;
 	moveSpeed = 1.5f;
 	health = 100.0f;
 	isFightAnim = false;
@@ -21,45 +19,13 @@ Player::Player()
 	MoveType = 1;
 
 	std::cout << "Player class has loaded\n";
+
+	lastShoot = clock();
 }
 
 void Player::UpdatePosition()
 {
 	entitySprite.setPosition(sf::Vector2f(entityShape.getPosition().x + 28, entityShape.getPosition().y + 21));
-}
-
-void Player::AnimateFight()
-{
-	if (isFightAnim)
-	{
-		int tempAnim = (int)floor(m_fightAnim / 3);
-
-		switch (direction)
-		{
-			case 0:
-				entitySprite.setTextureRect(sf::IntRect(64 * tempAnim, 768, 64, 64));
-				break;
-
-			case 1:
-				entitySprite.setTextureRect(sf::IntRect(64 * tempAnim, 896, 64, 64));
-				break;
-
-			case 2:
-				entitySprite.setTextureRect(sf::IntRect(64 * tempAnim, 832, 64, 64));
-				break;
-
-			case 3:
-				entitySprite.setTextureRect(sf::IntRect(64 * tempAnim, 960, 64, 64));
-				break;
-		}
-		m_fightAnim++;
-		if (m_fightAnim > 15)
-		{
-			m_fightAnim = 0;
-			isFightAnim = false;
-			ChangeAngle();
-		}
-	}
 }
 
 void Player::Move(sf::RenderWindow & mainWindow)
@@ -105,6 +71,7 @@ void Player::Move(sf::RenderWindow & mainWindow)
 			xPos -= speed / 2;
 		}
 	}
+	
 
 	if (xPos != 0 || yPos != 0)
 	{
@@ -123,6 +90,26 @@ void Player::Move(sf::RenderWindow & mainWindow)
 	{
 		heading += 360.0f;
 	}
+
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+	{
+		int timeNow = clock();
+		int timeTest = (timeNow - lastShoot) / double(CLOCKS_PER_SEC) * 1000;
+		if (timeTest > 500)
+		{
+			float bulletPosX = -sin(tempAngleInRadians) * 40;
+			float bulletPosY = cos(tempAngleInRadians) * 40;
+
+			Projectile* newBullet = new Projectile(sf::Vector2f(bulletPosX + entityBounds.left + (entityBounds.width / 2), bulletPosY + entityBounds.top + (entityBounds.height / 2)), tempAngleInRadians, heading, 20.0f);
+			App::loadedBullets.push_back(newBullet);
+
+			lastShoot = clock();
+		}
+
+		// lastShoot = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
+		
+	}
+
 	entitySprite.setRotation(heading);
 	// entityShape.setRotation(heading);
 }

@@ -10,6 +10,7 @@
 std::vector<Textures::Texture *> App::loadedTextures;
 std::vector<Tile *> App::loadedMap;
 std::vector<Enemy *> App::loadedEnemies;
+std::vector<Projectile *> App::loadedBullets;
 
 class MapTile : public AStarNode
 {
@@ -33,6 +34,24 @@ public:
 
 
 };
+
+void App::DestroyBullet(Projectile * bulletPointer)
+{
+	int foundIndex = -1;
+	for (int i = 0; i < (int)App::loadedBullets.size(); i++)
+	{
+		if (App::loadedBullets[i] == bulletPointer)
+		{
+			foundIndex = i;
+			break;
+		}
+	}
+	if (foundIndex != -1)
+	{
+		delete App::loadedBullets[foundIndex];
+		App::loadedBullets.erase(App::loadedBullets.begin() + foundIndex);
+	}
+}
 
 void App::LoadTextures()
 {
