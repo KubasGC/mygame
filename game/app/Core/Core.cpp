@@ -80,9 +80,15 @@ void Core::Loop()
 
 			for (int i = 0; i < (int)App::loadedBullets.size(); i++)
 			{
-				if (App::loadedBullets[i]->doesProjectileShouldBeRemoved(App::loadedMap))
+				int index = -1;
+				if (App::loadedBullets[i]->doesProjectileShouldBeRemoved(App::loadedMap, App::loadedEnemies, &index))
 				{
 					App::DestroyBullet(App::loadedBullets[i]);
+					if (index != -1)
+					{
+						App::DestroyEnemy(index);
+					}
+					
 				}
 				else
 				{

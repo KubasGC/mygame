@@ -14,6 +14,8 @@ public:
 	static std::vector<Projectile *> loadedBullets;
 
 	static void DestroyBullet(Projectile * bulletPointer);
+	static void DestroyEnemy(Enemy * enemyPointer);
+	static void DestroyEnemy(int index);
 	static void LoadTextures();
 	static sf::Sprite GetSpriteFromTexture(int textureId);
 

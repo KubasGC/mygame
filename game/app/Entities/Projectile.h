@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "../Tiles//Tile.h"
+#include "../Tiles/Tile.h"
+#include "Enemy.h"
 
 class Projectile
 {
@@ -19,6 +20,6 @@ private:
 public:
 	Projectile(sf::Vector2f position, float headingRad, float heading, float speed);
 	void Draw(sf::RenderWindow * window);
-	bool doesProjectileShouldBeRemoved(std::vector<Tile *> & map);
+	bool doesProjectileShouldBeRemoved(std::vector<Tile *> & map, std::vector<Enemy *> & enemies, int * enemyIndex);
 	sf::RectangleShape * getShape();
 };

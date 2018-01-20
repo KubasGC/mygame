@@ -30,7 +30,7 @@ void Projectile::Draw(sf::RenderWindow * window)
 	
 }
 
-bool Projectile::doesProjectileShouldBeRemoved(std::vector<Tile *> & map)
+bool Projectile::doesProjectileShouldBeRemoved(std::vector<Tile *> & map, std::vector<Enemy *> & enemies, int * enemyIndex)
 {
 	double distance = sqrt(pow(bulletStartPosition.x - bulletPosition.x, 2) + pow(bulletStartPosition.y - bulletPosition.y, 2));
 	if (distance > 1000)
@@ -40,6 +40,15 @@ bool Projectile::doesProjectileShouldBeRemoved(std::vector<Tile *> & map)
 	sf::FloatRect futureProjectilePos = shape.getGlobalBounds();
 	futureProjectilePos.left += -sin(bulletHeadingRad) * bulletSpeed;
 	futureProjectilePos.top += cos(bulletHeadingRad) * bulletSpeed;
+
+	for (int i = 0; i < (int)enemies.size(); i++)
+	{
+		if (futureProjectilePos.intersects(enemies[i]->getEntityShape()->getGlobalBounds()))
+		{
+			*(enemyIndex) = i;
+			return true;
+		}
+	}
 	for (int i = 0; i < (int)map.size(); i++)
 	{
 		if (map[i]->collisions)

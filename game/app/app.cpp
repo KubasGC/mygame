@@ -53,6 +53,30 @@ void App::DestroyBullet(Projectile * bulletPointer)
 	}
 }
 
+void App::DestroyEnemy(Enemy * enemyPointer)
+{
+	int foundIndex = -1;
+	for (int i = 0; i < (int)App::loadedEnemies.size(); i++)
+	{
+		if (App::loadedEnemies[i] == enemyPointer)
+		{
+			foundIndex = i;
+			break;
+		}
+	}
+	if (foundIndex != -1)
+	{
+		delete App::loadedEnemies[foundIndex];
+		App::loadedEnemies.erase(App::loadedEnemies.begin() + foundIndex);
+	}
+}
+
+void App::DestroyEnemy(int index)
+{
+	delete App::loadedEnemies[index];
+	App::loadedEnemies.erase(App::loadedEnemies.begin() + index);
+}
+
 void App::LoadTextures()
 {
 	std::string Files[1] =
