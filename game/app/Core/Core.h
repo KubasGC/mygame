@@ -23,6 +23,7 @@ private:
 	bool isFading;
 	bool fadeState; // true - fadeIn, false - fadeOut
 	int gameState;
+	int killedZombies;
 
 	std::vector<sf::Font *> loadedFonts;
 

@@ -2,13 +2,14 @@
 #include "Projectile.h"
 #include <iostream>
 
-Projectile::Projectile(sf::Vector2f position, float headingRad, float heading, float speed)
+Projectile::Projectile(sf::Vector2f position, float headingRad, float heading, float speed, bool enemyProjectile)
 {
 	bulletPosition = position;
 	bulletHeading = heading;
 	bulletHeadingRad = headingRad;
 	bulletSpeed = speed;
 	bulletStartPosition = position;
+	isEnemyProjectile = enemyProjectile;
 
 	shape.setSize(sf::Vector2f(10, 5));
 	shape.setFillColor(sf::Color::Green);
@@ -16,7 +17,14 @@ Projectile::Projectile(sf::Vector2f position, float headingRad, float heading, f
 	shape.setRotation(bulletHeading);
 	shape.setPosition(bulletPosition);
 
-	// std::cout << "Pocisk stworzony\n";
+	if (isEnemyProjectile)
+	{
+		shape.setFillColor(sf::Color::Red);
+	}
+	else
+	{
+		shape.setFillColor(sf::Color::Green);
+	}
 }
 
 void Projectile::Draw(sf::RenderWindow * window)
@@ -30,7 +38,7 @@ void Projectile::Draw(sf::RenderWindow * window)
 	
 }
 
-bool Projectile::doesProjectileShouldBeRemoved(std::vector<Tile *> & map, std::vector<Enemy *> & enemies, int * enemyIndex)
+bool Projectile::doesProjectileShouldBeRemoved(std::vector<Tile *> & map, std::vector<Enemy *> & enemies, int * enemyIndex, Player * playerClass, bool * playerHit)
 {
 	double distance = sqrt(pow(bulletStartPosition.x - bulletPosition.x, 2) + pow(bulletStartPosition.y - bulletPosition.y, 2));
 	if (distance > 1000)
@@ -40,12 +48,22 @@ bool Projectile::doesProjectileShouldBeRemoved(std::vector<Tile *> & map, std::v
 	sf::FloatRect futureProjectilePos = shape.getGlobalBounds();
 	futureProjectilePos.left += -sin(bulletHeadingRad) * bulletSpeed;
 	futureProjectilePos.top += cos(bulletHeadingRad) * bulletSpeed;
-
-	for (int i = 0; i < (int)enemies.size(); i++)
+	if (!isEnemyProjectile)
 	{
-		if (futureProjectilePos.intersects(enemies[i]->getEntityShape()->getGlobalBounds()))
+		for (int i = 0; i < (int)enemies.size(); i++)
 		{
-			*(enemyIndex) = i;
+			if (futureProjectilePos.intersects(enemies[i]->getEntityShape()->getGlobalBounds()))
+			{
+				*(enemyIndex) = i;
+				return true;
+			}
+		}
+	}
+	else
+	{
+		if (futureProjectilePos.intersects(playerClass->getEntityShape()->getGlobalBounds()))
+		{
+			*(playerHit) = true;
 			return true;
 		}
 	}

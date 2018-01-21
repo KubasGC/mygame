@@ -104,7 +104,7 @@ void Player::Move(sf::RenderWindow & mainWindow)
 			float bulletPosX = -sin(tempAngleInRadians) * 40;
 			float bulletPosY = cos(tempAngleInRadians) * 40;
 
-			Projectile* newBullet = new Projectile(sf::Vector2f(bulletPosX + entityBounds.left + (entityBounds.width / 2), bulletPosY + entityBounds.top + (entityBounds.height / 2)), tempAngleInRadians, heading, 20.0f);
+			Projectile* newBullet = new Projectile(sf::Vector2f(bulletPosX + entityBounds.left + (entityBounds.width / 2), bulletPosY + entityBounds.top + (entityBounds.height / 2)), tempAngleInRadians, heading, 20.0f, false);
 			App::loadedBullets.push_back(newBullet);
 
 			lastShoot = clock();
