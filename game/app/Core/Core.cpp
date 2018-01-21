@@ -241,7 +241,7 @@ void Core::GenerateEnemies(int count)
 			float yPos = cos(randomAngleRadians) * distance;
 
 			Enemy * randomEnemy = new Enemy(sf::Vector2f(CENTER_X + xPos, CENTER_Y + yPos), 45.0f, 1.0f);
-			if (randomEnemy->CheckCollision(App::loadedEnemies))
+			if (randomEnemy->CheckCollision(App::loadedEnemies, playerClass))
 			{
 				delete randomEnemy;
 				continue;

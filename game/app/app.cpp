@@ -217,7 +217,7 @@ void App::LoadPathfinderFromMap()
 }
 Tile * App::GetTileFromPosition(int x, int y)
 {
-	for (int i = 0; i < loadedMap.size(); i++)
+	for (int i = 0; i < (int) loadedMap.size(); i++)
 	{
 		if (loadedMap[i]->posX < x && loadedMap[i]->posX + (loadedMap[i]->scale * 16) > x)
 		{

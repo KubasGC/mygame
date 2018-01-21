@@ -19,8 +19,12 @@ Enemy::Enemy(sf::Vector2f startPosition, float h, float s)
 	// std::cout << "Enemy class has loaded\n";
 }
 
-bool Enemy::CheckCollision(std::vector<Enemy*>& enemies)
+bool Enemy::CheckCollision(std::vector<Enemy*>& enemies, Player * player)
 {
+	if (player->getEntityShape()->getGlobalBounds().intersects(entityShape.getGlobalBounds()))
+	{
+		return true;
+	}
 	for (int i = 0; i < (int)enemies.size(); i++)
 	{
 		if (enemies[i]->getEntityShape()->getGlobalBounds().intersects(entityShape.getGlobalBounds()))
@@ -34,7 +38,7 @@ bool Enemy::CheckCollision(std::vector<Enemy*>& enemies)
 void Enemy::Move(Player * playerClass)
 {
 	float tempAngleInRadians = -atan2(playerClass->entityShape.getPosition().x - entityShape.getPosition().x, playerClass->entityShape.getPosition().y - entityShape.getPosition().y);
-	float tempAngle = tempAngleInRadians * (180.0 / 3.14);
+	float tempAngle = (float)(tempAngleInRadians * (180.0 / 3.14));
 	if (tempAngle < 0)
 	{
 		tempAngle += 360;

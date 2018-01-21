@@ -38,7 +38,7 @@ void Player::Move(sf::RenderWindow & mainWindow)
 	sf::Vector2f localPosition = mainWindow.mapPixelToCoords(pixelPos);
 
 	float tempAngleInRadians = -atan2(localPosition.x - entityShape.getPosition().x, localPosition.y - entityShape.getPosition().y);
-	float tempAngle = tempAngleInRadians * (180.0 / 3.14);
+	float tempAngle = (float)(tempAngleInRadians * (180.0 / 3.14));
 	if (tempAngle < 0)
 	{
 		tempAngle += 360;
@@ -98,7 +98,7 @@ void Player::Move(sf::RenderWindow & mainWindow)
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
 	{
 		int timeNow = clock();
-		int timeTest = (timeNow - lastShoot) / double(CLOCKS_PER_SEC) * 1000;
+		int timeTest = (int)((timeNow - lastShoot) / double(CLOCKS_PER_SEC) * 1000);
 		if (timeTest > coolDown)
 		{
 			float bulletPosX = -sin(tempAngleInRadians) * 40;
