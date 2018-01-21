@@ -18,6 +18,7 @@ Core::Core()
 
 void Core::Init()
 {
+	srand(time(NULL));
 	// Tworzenie okna gry
 	mainWindow.create(sf::VideoMode(1366, 768), "Zombies attack", !sf::Style::Resize || sf::Style::Titlebar);
 	mainWindow.setFramerateLimit(60);
@@ -45,14 +46,11 @@ void Core::Init()
 	App::LoadTextures();
 	App::LoadMapFromFile("resources/maps/newMap.xml");
 
+	gameState = 1;
+
 	playerClass = new Player();
 	renderType = RenderType::GAME;
-
-	App::loadedEnemies.push_back(new Enemy(sf::Vector2f(150, 50)));
-	App::loadedEnemies.push_back(new Enemy(sf::Vector2f(200, 20)));
-	App::loadedEnemies.push_back(new Enemy(sf::Vector2f(250, 80)));
-	App::loadedEnemies.push_back(new Enemy(sf::Vector2f(300, 100)));
-
+	GenerateEnemies(4);
 	mainCamera.setSize(sf::Vector2f((float)mainWindow.getSize().x, (float)mainWindow.getSize().y));
 }
 
@@ -86,7 +84,19 @@ void Core::Loop()
 					App::DestroyBullet(App::loadedBullets[i]);
 					if (index != -1)
 					{
-						App::DestroyEnemy(index);
+						App::loadedEnemies[index]->health -= 15.0f;
+						App::loadedEnemies[index]->entitySprite.setColor(sf::Color(255, 0, 0, 255));
+						App::loadedEnemies[index]->ColorDamage();
+						if (App::loadedEnemies[index]->health <= 0)
+						{
+							App::DestroyEnemy(index);
+							if (App::loadedEnemies.size() == 0)
+							{
+								gameState++;
+								GenerateEnemies(4 * gameState);
+							}
+						}
+						// App::DestroyEnemy(index);
 					}
 					
 				}
@@ -100,6 +110,20 @@ void Core::Loop()
 			{
 				App::loadedEnemies[i]->Move(playerClass);
 				App::loadedEnemies[i]->Draw(&mainWindow);
+			}
+
+			GameRenderHUD();
+
+			if (playerClass->health <= 0)
+			{
+				playerClass->getEntityShape()->setPosition(sf::Vector2f(CENTER_X, CENTER_Y));
+				playerClass->health = 100.0f;
+				for (int i = App::loadedEnemies.size() - 1; i >= 0; i--)
+				{
+					App::DestroyEnemy(App::loadedEnemies[i]);
+				}
+				gameState = 1;
+				GenerateEnemies(4);
 			}
 
 			// mainWindow.draw(*(playerClass->getEntityShape()));
@@ -116,8 +140,8 @@ void Core::Loop()
 			tempText.setString(text);
 			tempText.setCharacterSize(20);
 			tempText.setPosition(playerClass->getEntityShape()->getPosition());
-			mainWindow.draw(tempText);
-			*/
+			mainWindow.draw(tempText);*/
+			
 
 
 			mainWindow.display();
@@ -198,6 +222,72 @@ void Core::RenderMap()
 	{
 		mainWindow.draw(App::loadedMap[i]->tileSprite);
 	}
+}
+
+void Core::GenerateEnemies(int count)
+{
+	for (int i = 0; i < count; i++)
+	{
+		for (int j = 0; j < 10; j++)
+		{
+			int randomAngleDegrees = rand() % 360;
+			float distance = rand() % 350 + 250;
+			if (distance > 350)
+			{
+				distance = 350.0f;
+			}
+			float randomAngleRadians = (randomAngleDegrees * 3.14) / 180;
+			float xPos = -sin(randomAngleRadians) * distance;
+			float yPos = cos(randomAngleRadians) * distance;
+
+			Enemy * randomEnemy = new Enemy(sf::Vector2f(CENTER_X + xPos, CENTER_Y + yPos), 45.0f, 1.0f);
+			if (randomEnemy->CheckCollision(App::loadedEnemies))
+			{
+				delete randomEnemy;
+				continue;
+			}
+			else
+			{
+				App::loadedEnemies.push_back(randomEnemy);
+				break;
+			}
+		}
+	}
+}
+
+void Core::GameRenderHUD()
+{
+	sf::Vector2f topPos = mainWindow.mapPixelToCoords(sf::Vector2i(0, 0));
+
+	sf::Texture health_bg_t, char_bg_t, health_bar_t;
+	sf::Sprite health_bg, char_bg;
+	sf::RectangleShape health_bar;
+
+	health_bg_t.loadFromFile("resources/UI/health_bg.png");
+	char_bg_t.loadFromFile("resources/UI/char_bg.png");
+	health_bar_t.loadFromFile("resources/UI/health_bar.png");
+
+	health_bg.setTexture(health_bg_t);
+	char_bg.setTexture(char_bg_t);
+	health_bar.setTexture(&health_bar_t);
+
+	float healthBarWidth = Linear::easeNone((float)playerClass->getHealth() / 100.0f, 0.0f, 187.0f, 1.0f);
+
+	health_bar.setSize(sf::Vector2f(healthBarWidth, 12.0f));
+
+
+
+	char_bg.setPosition(sf::Vector2f(topPos.x + 15.0f, topPos.y + 10.0f));
+	health_bg.setPosition(sf::Vector2f(char_bg.getPosition().x + 63.0f, char_bg.getPosition().y + 10.0f));
+	health_bar.setPosition(sf::Vector2f(health_bg.getPosition().x + 15.0f, char_bg.getPosition().y + 20.0f));
+
+
+
+
+
+	mainWindow.draw(health_bg);
+	mainWindow.draw(health_bar);
+	mainWindow.draw(char_bg);
 }
 
 /*

@@ -1,9 +1,21 @@
 #include "Entity.h"
 #include "../app.h"
 
+void Entity::CheckDamageColor()
+{
+	if (damageColored)
+	{
+		if (clock() - damageTime > 100)
+		{
+			damageColored = false;
+			entitySprite.setColor(sf::Color(255, 255, 255, 255));
+		}
+	}
+}
+
 Entity::Entity()
 {
-
+	damageColored = false;
 }
 
 void Entity::UpdatePosition()
@@ -11,7 +23,7 @@ void Entity::UpdatePosition()
 	entitySprite.setPosition(sf::Vector2f(entityShape.getPosition().x + 18, entityShape.getPosition().y + 21));
 }
 
-bool Entity::GetEntityMovePositionAfterCollide(float startPosX, float startPosY, float * posX, float * posY, Entity * playerClass)
+bool Entity::GetEntityMovePositionAfterCollide(float startPosX, float startPosY, float * posX, float * posY, Entity * playerClass, bool * playerCollision)
 {
 	bool xChanged = false;
 	bool yChanged = false;
@@ -26,6 +38,7 @@ bool Entity::GetEntityMovePositionAfterCollide(float startPosX, float startPosY,
 			{
 				// std::cout << "X ZMIENIONE" << std::endl;;
 				xChanged = true;
+				*(playerCollision) = true;
 				*(posX) = 0.0f;
 			}
 		}
@@ -37,6 +50,7 @@ bool Entity::GetEntityMovePositionAfterCollide(float startPosX, float startPosY,
 			{
 				// std::cout << "X ZMIENIONE" << std::endl;;
 				yChanged = true;
+				*(playerCollision) = true;
 				*(posY) = 0.0f;
 			}
 		}
@@ -104,4 +118,12 @@ bool Entity::GetEntityMovePositionAfterCollide(float startPosX, float startPosY,
 		return true;
 	}
 	return false;
+}
+
+void Entity::ColorDamage()
+{
+	damageTime = clock();
+	damageColored = true;
+
+	entitySprite.setColor(sf::Color(255, 0, 0, 255));
 }

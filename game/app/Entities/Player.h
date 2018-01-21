@@ -5,20 +5,15 @@
 class Player : public Entity
 {
 private:
-	bool isFightAnim;
-
-	int m_fightAnim;
 	int lastShoot;
+	int coolDown;
+	float damage;
 
 public:
 	Player();
 
 	void UpdatePosition();
-	void AnimateFight();
 
 	void Move(sf::RenderWindow & mainWindow);
-
-	bool getFightAnim() const;
-	void setFightAnim();
 };
 

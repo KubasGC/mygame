@@ -4,6 +4,11 @@
 #include "../Entities/Player.h"
 #include "../Entities/Enemy.h"
 #include "../Music/Music.h"
+#include <time.h>
+
+#define CENTER_X 130
+#define CENTER_Y 352
+
 class Core
 {
 private:
@@ -17,11 +22,9 @@ private:
 	int fadeTime;
 	bool isFading;
 	bool fadeState; // true - fadeIn, false - fadeOut
+	int gameState;
 
 	std::vector<sf::Font *> loadedFonts;
-
-	void InitGame();
-	void InitEditor();
 
 	// Fading
 	void FadeHandler();
@@ -31,35 +34,14 @@ private:
 	void FadeOut(int ms);
 	void SetFade(bool toggle);
 
-	void OnKeyPressed(sf::Event * e);
-	void OnKeyReleased(sf::Event * e);
+	void GameRenderHUD();
 
 	// Renderowanie gry
 	Player * playerClass;
 
 	void RenderMap();
-	void GameRenderEntities();
-	void GameRenderHUD();
-	void GameKeyboardEvents();
 
-	// Edytor map
-	sf::RectangleShape * editorShape;
-	sf::RectangleShape * editorCenterShape;
-	sf::Sprite editorSprite;
-	int editorChoosedTexture;
-	bool editorCollision;
-	bool editorRightButtonPressed;
-
-	void EditorRenderMap();
-	void EditorMouseEvents();
-	void EditorRenderInfo();
-	sf::Vector2i GetTileFromMouse();
-
-	// Intro
-	int introStep;
-	sf::Clock introClock;
-
-	void InitIntro();
+	void GenerateEnemies(int count);
 public:
 	Core();
 

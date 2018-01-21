@@ -2,4 +2,5 @@
 <textures>
   <texture left="0" top="0" width="256" height="64" />
   <texture left="256" top="0" width="128" height="64" />
+  <texture left="768" top="0" width="64" height="64" />
 </textures>

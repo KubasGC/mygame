@@ -12,9 +12,12 @@ Player::Player()
 	entityShape.setSize(sf::Vector2f(50, 40));
 	entityShape.setFillColor(sf::Color::Blue);
 
+	entityShape.setPosition(sf::Vector2f(130, 352));
+
 	moveSpeed = 1.5f;
 	health = 100.0f;
-	isFightAnim = false;
+	damage = 15.0f;
+	coolDown = 500;
 
 	MoveType = 1;
 
@@ -25,6 +28,7 @@ Player::Player()
 
 void Player::UpdatePosition()
 {
+	CheckDamageColor();
 	entitySprite.setPosition(sf::Vector2f(entityShape.getPosition().x + 28, entityShape.getPosition().y + 21));
 }
 
@@ -95,7 +99,7 @@ void Player::Move(sf::RenderWindow & mainWindow)
 	{
 		int timeNow = clock();
 		int timeTest = (timeNow - lastShoot) / double(CLOCKS_PER_SEC) * 1000;
-		if (timeTest > 500)
+		if (timeTest > coolDown)
 		{
 			float bulletPosX = -sin(tempAngleInRadians) * 40;
 			float bulletPosY = cos(tempAngleInRadians) * 40;
@@ -112,18 +116,4 @@ void Player::Move(sf::RenderWindow & mainWindow)
 
 	entitySprite.setRotation(heading);
 	// entityShape.setRotation(heading);
-}
-
-bool Player::getFightAnim() const
-{
-	return isFightAnim;
-}
-
-void Player::setFightAnim()
-{
-	if (!isFightAnim)
-	{
-		isFightAnim = true;
-		m_fightAnim = 0;
-	}
 }

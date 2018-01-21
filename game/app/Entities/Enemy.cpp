@@ -1,7 +1,7 @@
 #include "Enemy.h"
 #include <iostream>
 
-Enemy::Enemy(sf::Vector2f startPosition)
+Enemy::Enemy(sf::Vector2f startPosition, float h, float s)
 {
 	entityTexture.loadFromFile("resources/sprites/characters.png");
 	entitySprite.setTexture(entityTexture);
@@ -11,12 +11,24 @@ Enemy::Enemy(sf::Vector2f startPosition)
 	entityShape.setFillColor(sf::Color::Blue);
 
 	entityShape.setPosition(startPosition);
-	moveSpeed = 1.5f;
-	health = 100.0f;
+	moveSpeed = s;
+	health = h;
 	heading = 0.0f;
 	position = startPosition;
 
-	std::cout << "Enemy class has loaded\n";
+	// std::cout << "Enemy class has loaded\n";
+}
+
+bool Enemy::CheckCollision(std::vector<Enemy*>& enemies)
+{
+	for (int i = 0; i < (int)enemies.size(); i++)
+	{
+		if (enemies[i]->getEntityShape()->getGlobalBounds().intersects(entityShape.getGlobalBounds()))
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 void Enemy::Move(Player * playerClass)
@@ -31,8 +43,13 @@ void Enemy::Move(Player * playerClass)
 
 	float xPos = -sin(tempAngleInRadians) * moveSpeed;
 	float yPos = cos(tempAngleInRadians) * moveSpeed;
-
-	GetEntityMovePositionAfterCollide(position.x, position.y, &xPos, &yPos, playerClass);
+	bool playerCollide = false;
+	GetEntityMovePositionAfterCollide(position.x, position.y, &xPos, &yPos, playerClass, &playerCollide);
+	if (playerCollide)
+	{
+		playerClass->health -= 0.5f;
+		playerClass->ColorDamage();
+	}
 
 	position = sf::Vector2f(position.x + xPos, position.y + yPos);
 }
@@ -40,6 +57,7 @@ void Enemy::Move(Player * playerClass)
 void Enemy::Draw(sf::RenderWindow * window)
 {
 	UpdatePosition();
+	CheckDamageColor();
 	entitySprite.setRotation(heading);
 	entityShape.setPosition(position);
 
