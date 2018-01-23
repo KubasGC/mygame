@@ -13,7 +13,7 @@
 
 Core::Core()
 {
-
+	
 }
 
 void Core::Init()
@@ -23,15 +23,17 @@ void Core::Init()
 	mainWindow.create(sf::VideoMode(1366, 768), "Zombies attack", !sf::Style::Resize || sf::Style::Titlebar);
 	mainWindow.setFramerateLimit(60);
 	mainWindow.setVerticalSyncEnabled(false);
+	score = 0;
 
 	// system dŸwiêku todo
 
 	// £adowanie czcionek
-	std::string Files[1] =
+	std::string Files[2] =
 	{
-		std::string("resources/fonts/Roboto-Light.ttf") // 0
+		std::string("resources/fonts/Roboto-Light.ttf"), // 0
+		std::string("resources/fonts/defused.ttf") // 1
 	};
-	for (int file = 0; file < 1; file++)
+	for (int file = 0; file < 2; file++)
 	{
 		sf::Font * tempFont = new sf::Font();
 		tempFont->loadFromFile(Files[file].c_str());
@@ -40,7 +42,7 @@ void Core::Init()
 	}
 
 	// Tworzenie fade rectangle
-	fadeRectangle = new RectangleShape();
+	fadeRectangle = new sf::RectangleShape();
 	fadeRectangle->setFillColor(sf::Color(0, 0, 0, 0));
 
 	App::LoadTextures();
@@ -48,13 +50,13 @@ void Core::Init()
 
 	gameState = 1;
 	killedZombies = 0;
+	isAlive = true;
 
 	playerClass = new Player();
 	renderType = RenderType::GAME;
 	GenerateEnemies(4);
 	mainCamera.setSize(sf::Vector2f((float)mainWindow.getSize().x, (float)mainWindow.getSize().y));
 }
-
 void Core::Loop()
 {
 	while (mainWindow.isOpen())
@@ -91,10 +93,19 @@ void Core::Loop()
 						App::loadedEnemies[index]->ColorDamage();
 						if (App::loadedEnemies[index]->health <= 0)
 						{
+							if (App::loadedEnemies[index]->enemyType == 2)
+							{
+								score += 9;
+							}
+							else
+							{
+								score += 5;
+							}
 							App::DestroyEnemy(index);
 							killedZombies++;
 							if (App::loadedEnemies.size() == 0)
 							{
+								score += 20 + (gameState * 18);
 								gameState++;
 								GenerateEnemies(4 * gameState);
 							}
@@ -121,9 +132,13 @@ void Core::Loop()
 
 			GameRenderHUD();
 
-			if (playerClass->health <= 0)
+			if (playerClass->health <= 0 && isAlive)
 			{
-				playerClass->getEntityShape()->setPosition(sf::Vector2f(CENTER_X, CENTER_Y));
+
+				isAlive = false;
+				FadeOut(3000);
+
+				/*playerClass->getEntityShape()->setPosition(sf::Vector2f(CENTER_X, CENTER_Y));
 				playerClass->health = 100.0f;
 				for (int i = App::loadedEnemies.size() - 1; i >= 0; i--)
 				{
@@ -131,11 +146,16 @@ void Core::Loop()
 				}
 				gameState = 1;
 				GenerateEnemies(4);
+				score = 0;*/
 			}
 
 			// mainWindow.draw(*(playerClass->getEntityShape()));
 			mainWindow.draw(*(playerClass->getEntitySprite()));
-			playerClass->Move(mainWindow);
+			if (isAlive)
+			{
+				playerClass->Move(mainWindow);
+			}
+			
 			playerClass->UpdatePosition();
 			mainCamera.setCenter(playerClass->getEntityShape()->getPosition());
 			mainWindow.setView(mainCamera);
@@ -150,12 +170,19 @@ void Core::Loop()
 			mainWindow.draw(tempText);*/
 			
 
+			RenderFade();
+			mainWindow.display();
+		}
+		else if (renderType == RenderType::DEAD)
+		{
+			mainWindow.clear(sf::Color::Black);
 
+
+			RenderFade();
 			mainWindow.display();
 		}
 	}
 }
-
 void Core::FadeHandler()
 {
 	if (isFading)
@@ -182,7 +209,6 @@ void Core::FadeHandler()
 
 	}
 }
-
 void Core::RenderFade()
 {
 	sf::Vector2f topPos = mainWindow.mapPixelToCoords(sf::Vector2i(0, 0));
@@ -191,7 +217,6 @@ void Core::RenderFade()
 	fadeRectangle->setPosition(topPos);
 	mainWindow.draw(*fadeRectangle);
 }
-
 void Core::FadeIn(int ms)
 {
 	fadeState = true;
@@ -200,7 +225,6 @@ void Core::FadeIn(int ms)
 	fadeClock.restart();
 	isFading = true;
 }
-
 void Core::FadeOut(int ms)
 {
 	fadeState = false;
@@ -209,7 +233,6 @@ void Core::FadeOut(int ms)
 	fadeClock.restart();
 	isFading = true;
 }
-
 void Core::SetFade(bool toggle)
 {
 	isFading = false;
@@ -222,7 +245,6 @@ void Core::SetFade(bool toggle)
 		fadeRectangle->setFillColor(sf::Color(0, 0, 0, 255));
 	}
 }
-
 void Core::RenderMap()
 {
 	for (int i = 0; i < (int)App::loadedMap.size(); i++)
@@ -230,7 +252,6 @@ void Core::RenderMap()
 		mainWindow.draw(App::loadedMap[i]->tileSprite);
 	}
 }
-
 void Core::GenerateEnemies(int count)
 {
 	int secondTypeCount = 0;
@@ -275,7 +296,6 @@ void Core::GenerateEnemies(int count)
 		}
 	}
 }
-
 void Core::GameRenderHUD()
 {
 	sf::Vector2f topPos = mainWindow.mapPixelToCoords(sf::Vector2i(0, 0));
@@ -292,7 +312,13 @@ void Core::GameRenderHUD()
 	char_bg.setTexture(char_bg_t);
 	health_bar.setTexture(&health_bar_t);
 
-	float healthBarWidth = Linear::easeNone((float)playerClass->getHealth() / 100.0f, 0.0f, 187.0f, 1.0f);
+	float pHealth = playerClass->health;
+	if (pHealth < 0.0f)
+	{
+		pHealth = 0.0f;
+	}
+
+	float healthBarWidth = Linear::easeNone((float)pHealth / 100.0f, 0.0f, 187.0f, 1.0f);
 	health_bar.setSize(sf::Vector2f(healthBarWidth, 12.0f));
 
 	char_bg.setPosition(sf::Vector2f(topPos.x + 15.0f, topPos.y + 10.0f));
@@ -305,8 +331,8 @@ void Core::GameRenderHUD()
 
 	sf::Text tempText;
 	tempText.setFont(*loadedFonts[0]);
-	char text[200];
-	sprintf_s(text, "Fala: %d\nPokonanych przeciwników: %d", gameState, killedZombies);
+	char text[300];
+	sprintf_s(text, "Fala: %d\nPokonanych przeciwników: %d\nWynik: %d", gameState, killedZombies, score);
 	tempText.setString(text);
 	tempText.setCharacterSize(15);
 	tempText.setPosition(topPos.x + 5.0f, topPos.y + 110.0f);

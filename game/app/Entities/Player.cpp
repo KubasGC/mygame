@@ -18,8 +18,7 @@ Player::Player()
 	health = 100.0f;
 	damage = 15.0f;
 	coolDown = 500;
-
-	MoveType = 1;
+	weaponType = 5;
 
 	std::cout << "Player class has loaded\n";
 
@@ -104,8 +103,57 @@ void Player::Move(sf::RenderWindow & mainWindow)
 			float bulletPosX = -sin(tempAngleInRadians) * 40;
 			float bulletPosY = cos(tempAngleInRadians) * 40;
 
-			Projectile* newBullet = new Projectile(sf::Vector2f(bulletPosX + entityBounds.left + (entityBounds.width / 2), bulletPosY + entityBounds.top + (entityBounds.height / 2)), tempAngleInRadians, heading, 20.0f, false);
-			App::loadedBullets.push_back(newBullet);
+			if (weaponType == 1)
+			{
+				Projectile* newBullet = new Projectile(sf::Vector2f(bulletPosX + entityBounds.left + (entityBounds.width / 2), bulletPosY + entityBounds.top + (entityBounds.height / 2)), tempAngleInRadians, heading, 20.0f, false);
+				App::loadedBullets.push_back(newBullet);
+			}
+			else if (weaponType == 2)
+			{
+				Projectile* firstBullet = new Projectile(sf::Vector2f(bulletPosX + entityBounds.left + (entityBounds.width / 2), bulletPosY + entityBounds.top + (entityBounds.height / 2)), tempAngleInRadians - 0.15, heading, 20.0f, false);
+				Projectile* secondBullet = new Projectile(sf::Vector2f(bulletPosX + entityBounds.left + (entityBounds.width / 2), bulletPosY + entityBounds.top + (entityBounds.height / 2)), tempAngleInRadians + 0.15, heading, 20.0f, false);
+				
+				App::loadedBullets.push_back(firstBullet);
+				App::loadedBullets.push_back(secondBullet);
+			}
+			else if (weaponType == 3)
+			{
+				Projectile* firstBullet = new Projectile(sf::Vector2f(bulletPosX + entityBounds.left + (entityBounds.width / 2), bulletPosY + entityBounds.top + (entityBounds.height / 2)), tempAngleInRadians - 0.3, heading, 20.0f, false);
+				Projectile* secondBullet = new Projectile(sf::Vector2f(bulletPosX + entityBounds.left + (entityBounds.width / 2), bulletPosY + entityBounds.top + (entityBounds.height / 2)), tempAngleInRadians, heading, 20.0f, false);
+				Projectile* thirdBullet = new Projectile(sf::Vector2f(bulletPosX + entityBounds.left + (entityBounds.width / 2), bulletPosY + entityBounds.top + (entityBounds.height / 2)), tempAngleInRadians + 0.3, heading, 20.0f, false);
+			
+				App::loadedBullets.push_back(firstBullet);
+				App::loadedBullets.push_back(secondBullet);
+				App::loadedBullets.push_back(thirdBullet);
+			}
+			else if (weaponType == 4)
+			{
+				Projectile* firstBullet = new Projectile(sf::Vector2f(bulletPosX + entityBounds.left + (entityBounds.width / 2), bulletPosY + entityBounds.top + (entityBounds.height / 2)), tempAngleInRadians - 0.3, heading, 20.0f, false);
+				Projectile* secondBullet = new Projectile(sf::Vector2f(bulletPosX + entityBounds.left + (entityBounds.width / 2), bulletPosY + entityBounds.top + (entityBounds.height / 2)), tempAngleInRadians - 0.15, heading, 20.0f, false);
+				Projectile* thirdBullet = new Projectile(sf::Vector2f(bulletPosX + entityBounds.left + (entityBounds.width / 2), bulletPosY + entityBounds.top + (entityBounds.height / 2)), tempAngleInRadians + 0.15, heading, 20.0f, false);
+				Projectile* fourthBullet = new Projectile(sf::Vector2f(bulletPosX + entityBounds.left + (entityBounds.width / 2), bulletPosY + entityBounds.top + (entityBounds.height / 2)), tempAngleInRadians + 0.3, heading, 20.0f, false);
+
+				App::loadedBullets.push_back(firstBullet);
+				App::loadedBullets.push_back(secondBullet);
+				App::loadedBullets.push_back(thirdBullet);
+				App::loadedBullets.push_back(fourthBullet);
+			}
+			else if (weaponType == 5)
+			{
+				Projectile* firstBullet = new Projectile(sf::Vector2f(bulletPosX + entityBounds.left + (entityBounds.width / 2), bulletPosY + entityBounds.top + (entityBounds.height / 2)), tempAngleInRadians - 0.3, heading, 20.0f, false);
+				Projectile* secondBullet = new Projectile(sf::Vector2f(bulletPosX + entityBounds.left + (entityBounds.width / 2), bulletPosY + entityBounds.top + (entityBounds.height / 2)), tempAngleInRadians - 0.15, heading, 20.0f, false);
+				Projectile* thirdBullet = new Projectile(sf::Vector2f(bulletPosX + entityBounds.left + (entityBounds.width / 2), bulletPosY + entityBounds.top + (entityBounds.height / 2)), tempAngleInRadians + 0.15, heading, 20.0f, false);
+				Projectile* fourthBullet = new Projectile(sf::Vector2f(bulletPosX + entityBounds.left + (entityBounds.width / 2), bulletPosY + entityBounds.top + (entityBounds.height / 2)), tempAngleInRadians + 0.3, heading, 20.0f, false);
+				Projectile* fifthBullet = new Projectile(sf::Vector2f(bulletPosX + entityBounds.left + (entityBounds.width / 2), bulletPosY + entityBounds.top + (entityBounds.height / 2)), tempAngleInRadians, heading, 20.0f, false);
+
+
+				App::loadedBullets.push_back(firstBullet);
+				App::loadedBullets.push_back(secondBullet);
+				App::loadedBullets.push_back(thirdBullet);
+				App::loadedBullets.push_back(fourthBullet);
+				App::loadedBullets.push_back(fifthBullet);
+			}
+			
 
 			lastShoot = clock();
 		}

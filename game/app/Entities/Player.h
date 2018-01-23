@@ -8,6 +8,7 @@ private:
 	int lastShoot;
 	int coolDown;
 	float damage;
+	int weaponType;
 
 public:
 	Player();

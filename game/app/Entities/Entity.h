@@ -2,7 +2,6 @@
 #include <SFML/Graphics.hpp>
 #include <time.h>
 
-using namespace sf;
 class Entity
 {
 protected:
@@ -13,7 +12,6 @@ public:
 	sf::Sprite entitySprite;
 	sf::RectangleShape entityShape;
 
-	int MoveType;
 	float moveSpeed;
 	float health;
 	float heading;
@@ -30,8 +28,8 @@ public:
 	void ColorDamage();
 
 	// Gettery i settery
-	Sprite * getEntitySprite() { return &entitySprite; }
-	Shape * getEntityShape() { return &entityShape; }
+	sf::Sprite * getEntitySprite() { return &entitySprite; }
+	sf::Shape * getEntityShape() { return &entityShape; }
 
 	float getMoveSpeed() { return moveSpeed; }
 
