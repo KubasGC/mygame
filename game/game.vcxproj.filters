@@ -136,6 +136,7 @@
     <Font Include="resources\fonts\BarlowSemiCondensed-Light.ttf" />
     <Font Include="resources\fonts\Roboto-Regular.ttf" />
     <Font Include="resources\fonts\Roboto-Light.ttf" />
+    <Font Include="resources\fonts\defused.ttf" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="resources\tiles\Floor.xml" />

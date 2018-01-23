@@ -20,7 +20,7 @@ void Core::Init()
 {
 	srand(time(NULL));
 	// Tworzenie okna gry
-	mainWindow.create(sf::VideoMode(1366, 768), "Zombies attack", !sf::Style::Resize || sf::Style::Titlebar);
+	mainWindow.create(sf::VideoMode(1366, 768), "Zombies attack", !sf::Style::Resize | sf::Style::Titlebar | sf::Style::Close);
 	mainWindow.setFramerateLimit(60);
 	mainWindow.setVerticalSyncEnabled(false);
 	score = 0;
@@ -67,6 +67,10 @@ void Core::Loop()
 		// todo pêtla do systemu audio
 		while (mainWindow.pollEvent(windowEvent))
 		{
+			if (windowEvent.type == sf::Event::Closed)
+			{
+				return;
+			}
 			// todo eventy
 		}
 		
@@ -176,7 +180,53 @@ void Core::Loop()
 		else if (renderType == RenderType::DEAD)
 		{
 			mainWindow.clear(sf::Color::Black);
+			sf::Vector2f topPos = mainWindow.mapPixelToCoords(sf::Vector2i(0, 0));
 
+			sf::Text tempText;
+			tempText.setFont(*loadedFonts[1]);
+			tempText.setString("GAME OVER");
+			tempText.setCharacterSize(100);
+			tempText.setPosition(sf::Vector2f(topPos.x + 683 - (tempText.getGlobalBounds().width / 2), topPos.y + 250.0f));
+			mainWindow.draw(tempText);
+
+			sf::Text textScore;
+			textScore.setFont(*loadedFonts[1]);
+			char text[300];
+			sprintf_s(text, "WYNIK: %d", score);
+			textScore.setString(text);
+			textScore.setCharacterSize(30);
+			textScore.setPosition(sf::Vector2f(topPos.x + 683 - (textScore.getGlobalBounds().width / 2), topPos.y + 360.0f));
+			mainWindow.draw(textScore);
+
+			sf::Vector2i pixelPos = sf::Mouse::getPosition(mainWindow);
+			sf::Vector2f localPosition = mainWindow.mapPixelToCoords(pixelPos);
+
+			sf::Text back;
+			back.setFont(*loadedFonts[0]);
+			back.setString("Zagraj ponownie");
+			back.setCharacterSize(40);
+			back.setPosition(sf::Vector2f(topPos.x + 683 - (back.getGlobalBounds().width / 2), topPos.y + 500.0f));
+
+			if (localPosition.x > back.getGlobalBounds().left && localPosition.y > back.getGlobalBounds().top && localPosition.x < (back.getGlobalBounds().left + back.getGlobalBounds().width) && localPosition.y < (back.getGlobalBounds().top + back.getGlobalBounds().height))
+			{
+				back.setFillColor(sf::Color::Red);
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+				{
+					renderType = RenderType::GAME;
+					isAlive = true;
+					score = 0;
+					playerClass->getEntityShape()->setPosition(sf::Vector2f(CENTER_X, CENTER_Y));
+					playerClass->health = 100.0f;
+					for (int i = App::loadedEnemies.size() - 1; i >= 0; i--)
+					{
+						App::DestroyEnemy(App::loadedEnemies[i]);
+					}
+					gameState = 1;
+					GenerateEnemies(4);
+				}
+			}
+
+			mainWindow.draw(back);
 
 			RenderFade();
 			mainWindow.display();
@@ -205,6 +255,11 @@ void Core::FadeHandler()
 		{
 			SetFade(fadeState);
 			isFading = false;
+			if (fadeState == false && !isAlive)
+			{
+				renderType = RenderType::DEAD;
+				FadeIn(3000);
+			}
 		}
 
 	}
