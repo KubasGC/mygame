@@ -53,7 +53,7 @@ void Core::Init()
 	isAlive = true;
 
 	playerClass = new Player();
-	renderType = RenderType::GAME;
+	renderType = RenderType::MENU;
 	GenerateEnemies(4);
 	mainCamera.setSize(sf::Vector2f((float)mainWindow.getSize().x, (float)mainWindow.getSize().y));
 }
@@ -76,6 +76,47 @@ void Core::Loop()
 		
 		if (renderType == RenderType::MENU)
 		{
+			mainWindow.clear(sf::Color::Black);
+
+			sf::Vector2f topPos = mainWindow.mapPixelToCoords(sf::Vector2i(0, 0));
+			sf::Vector2i pixelPos = sf::Mouse::getPosition(mainWindow);
+			sf::Vector2f localPosition = mainWindow.mapPixelToCoords(pixelPos);
+
+			sf::Text start;
+			start.setFont(*loadedFonts[0]);
+			start.setString("Zacznij gre");
+			start.setCharacterSize(40);
+			start.setPosition(sf::Vector2f(topPos.x + 683 - (start.getGlobalBounds().width / 2), topPos.y + 400.0f));
+
+			sf::Text back;
+			back.setFont(*loadedFonts[0]);
+			back.setString("Wyjscie");
+			back.setCharacterSize(40);
+			back.setPosition(sf::Vector2f(topPos.x + 683 - (back.getGlobalBounds().width / 2), topPos.y + 500.0f));
+
+			if (localPosition.x > start.getGlobalBounds().left && localPosition.y > start.getGlobalBounds().top && localPosition.x < (start.getGlobalBounds().left + start.getGlobalBounds().width) && localPosition.y < (start.getGlobalBounds().top + start.getGlobalBounds().height))
+			{
+				start.setFillColor(sf::Color::Red);
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+				{
+					renderType = RenderType::GAME;
+				}
+
+			}
+
+			if (localPosition.x > back.getGlobalBounds().left && localPosition.y > back.getGlobalBounds().top && localPosition.x < (back.getGlobalBounds().left + back.getGlobalBounds().width) && localPosition.y < (back.getGlobalBounds().top + back.getGlobalBounds().height))
+			{
+				back.setFillColor(sf::Color::Red);
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+				{
+					mainWindow.close();
+				}
+				
+			}
+			mainWindow.draw(start);
+			mainWindow.draw(back);
+
+			mainWindow.display();
 
 		}
 		else if (renderType == RenderType::GAME)
